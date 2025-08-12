@@ -1,0 +1,41 @@
+name: vitastream
+description: A new Flutter project.
+version: 1.0.0+1
+
+
+environment:
+  sdk: ">=3.8.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  flutter_reactive_ble: ^5.3.1
+  sqflite: ^2.3.3
+  permission_handler: ^11.3.0
+  flutter_local_notifications: ^17.1.2
+  flutter_map: ^6.0.1
+  easy_localization: ^3.0.5
+  lottie: ^2.3.2
+  smooth_page_indicator: ^1.1.0
+  animated_background: ^2.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/lottie/water_map.json
+    - assets/lottie/bluetooth.json
+    - assets/lottie/water_quality.json
+    - assets/lottie/login_button.json
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+
+
+
+ 
+
