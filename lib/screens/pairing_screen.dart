@@ -145,8 +145,10 @@ class _PairingScreenState extends State<PairingScreen>
                         ],
                       ),
                       child: ListTile(
-                        leading: const Icon(Icons.bluetooth,
-                            color: Color(0xFF00A896)),
+                        leading: const Icon(
+                          Icons.bluetooth,
+                          color: Color(0xFF00A896),
+                        ),
                         title: Text(
                           devices[index],
                           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -157,13 +159,11 @@ class _PairingScreenState extends State<PairingScreen>
                           ),
                           onPressed: () {
                             setState(() {
-                              status =
-                                  "Connecting to ${devices[index]}...";
+                              status = "Connecting to ${devices[index]}...";
                             });
                             Future.delayed(const Duration(seconds: 2), () {
                               setState(() {
-                                status =
-                                    "Connected to ${devices[index]} ✅";
+                                status = "Connected to ${devices[index]} ✅";
                               });
                             });
                           },
@@ -224,14 +224,8 @@ class _PairingScreenState extends State<PairingScreen>
             icon: Icon(Icons.dashboard),
             label: "Dashboard",
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: "Map",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.lightbulb),
-            label: "Tips",
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.map), label: "Map"),
+          BottomNavigationBarItem(icon: Icon(Icons.lightbulb), label: "Tips"),
         ],
       ),
     );
@@ -256,8 +250,9 @@ class WavePainter extends CustomPainter {
     double maxRadius = size.width / 2;
     for (int i = 0; i < 3; i++) {
       double radius = (progress + i / 3) % 1 * maxRadius;
-      paint.color = Colors.blueAccent
-          .withOpacity((1 - radius / maxRadius) * 0.3);
+      paint.color = Colors.blueAccent.withOpacity(
+        (1 - radius / maxRadius) * 0.3,
+      );
       canvas.drawCircle(size.center(Offset.zero), radius, paint);
     }
   }
@@ -268,4 +263,3 @@ class WavePainter extends CustomPainter {
         oldDelegate.isScanning != isScanning;
   }
 }
-

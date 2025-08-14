@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:animated_background/animated_background.dart';
+import '../main.dart';
 
 class OnboardingLoginScreen extends StatefulWidget {
   const OnboardingLoginScreen({super.key});
@@ -75,7 +76,7 @@ class _OnboardingLoginScreenState extends State<OnboardingLoginScreen>
               const SizedBox(height: 20),
               isLastPage
                   ? buildLoginButton(context)
-                  : buildSkipNextButtons(),
+                  : buildSkipNextButtons(context),
               const SizedBox(height: 20),
             ],
           ),
@@ -84,10 +85,11 @@ class _OnboardingLoginScreenState extends State<OnboardingLoginScreen>
     );
   }
 
-  Widget buildPage(
-      {required String title,
-      required String description,
-      required String imagePath}) {
+  Widget buildPage({
+    required String title,
+    required String description,
+    required String imagePath,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -117,7 +119,7 @@ class _OnboardingLoginScreenState extends State<OnboardingLoginScreen>
     );
   }
 
-  Widget buildSkipNextButtons() {
+  Widget buildSkipNextButtons(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Row(
@@ -125,7 +127,8 @@ class _OnboardingLoginScreenState extends State<OnboardingLoginScreen>
         children: [
           TextButton(
             onPressed: () {
-              Navigator.pushReplacementNamed(context, '/home');
+             Navigator.pushReplacementNamed(context, '/login');
+
             },
             child: const Text(
               "Skip",
@@ -154,7 +157,7 @@ class _OnboardingLoginScreenState extends State<OnboardingLoginScreen>
   Widget buildLoginButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushReplacementNamed(context, '/login');
       },
       child: Lottie.asset(
         "assets/lottie/login_button.json",

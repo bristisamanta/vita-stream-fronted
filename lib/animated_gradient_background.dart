@@ -34,11 +34,10 @@ class _AnimatedGradientBackgroundState
   @override
   Widget build(BuildContext context) {
     final List<Color> colors = [
-      Color(0xFF05668D), // Deep teal
-      Color(0xFF00A896), // Aqua
-      Color(0xFF06D6A0), // Green
-      Color(0xFFFFD166), // Orange
-      Color(0xFFEF476F), // Red
+       const Color(0xFFA8D08D), // fresh green
+       const Color(0xFFC6E2B5), // light grass
+       const Color(0xFF6FA66F), // deep stalk green
+       const Color(0xFFFFD966), // golden rice
     ];
 
     return AnimatedContainer(

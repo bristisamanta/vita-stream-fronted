@@ -18,28 +18,25 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _fadeAnimation;
 
   @override
-  void initState() {
-    super.initState();
+void initState() {
+  super.initState();
 
-    // Animation setup
-    _controller = AnimationController(
-      duration: const Duration(seconds: 4),
-      vsync: this,
-    )..repeat(); // Loop wave movement
+  // Animation setup
+  _controller = AnimationController(
+    duration: const Duration(seconds: 4),
+    vsync: this,
+  )..repeat();
 
-    _fadeAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeIn,
-    );
+  _fadeAnimation = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.easeIn,
+  );
 
-    // Navigate after delay
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const OnboardingLoginScreen()),
-      );
-    });
-  }  // <-- Important closing bracket here
+  // Navigate after delay (using named route)
+  Timer(const Duration(seconds: 3), () {
+    Navigator.pushReplacementNamed(context, '/onboarding');
+  });
+}
 
   @override
   void dispose() {
