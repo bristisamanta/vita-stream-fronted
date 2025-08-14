@@ -2,7 +2,6 @@ name: vitastream
 description: A new Flutter project.
 version: 1.0.0+1
 
-
 environment:
   sdk: ">=3.8.0 <4.0.0"
 
@@ -21,7 +20,7 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   animated_background: ^2.0.0
   google_maps_flutter: ^2.5.0
-  geolocator: ^10.1.0yes
+  geolocator: ^10.1.0
   url_launcher: ^6.2.5
 
 flutter:
