@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'animated_gradient_background.dart';
 import 'screens/pairing_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/onboarding_login_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/dashboard_screen.dart'; // ✅ Import DashboardScreen
 import 'screens/map_screen.dart';
-
+import 'screens/sign_up.dart'; // ✅ New Import for Sign Up Screen
 
 void navigateWithAnimation(BuildContext context, Widget page) {
   Navigator.of(context).pushReplacement(
@@ -46,7 +45,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         '/onboarding': (context) => const OnboardingLoginScreen(),
         '/login': (context) => const LoginScreen(),
-        '/dashboard': (context) => const NavigationWrapper(initialIndex: 1), // ✅ Added
+        '/signup': (context) => const SignUpScreen(), // ✅ Added Sign Up route
+        '/dashboard': (context) => const NavigationWrapper(initialIndex: 1),
       },
     );
   }
@@ -71,8 +71,8 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
 
   final List<Widget> _screens = [
     const PairingScreen(),
-    const DashboardScreen(), // ✅ Dashboard screen as main tab
-    const MapScreen(), 
+    const DashboardScreen(),
+    const MapScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -92,7 +92,6 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
         elevation: 6,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.bluetooth, size: 30),
@@ -103,9 +102,9 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
             label: 'Dashboard',
           ),
           BottomNavigationBarItem(
-        icon: Icon(Icons.map, size: 26),
-        label: 'Map',
-         ),
+            icon: Icon(Icons.map, size: 26),
+            label: 'Map',
+          ),
         ],
       ),
     );

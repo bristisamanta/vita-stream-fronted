@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:math' as math;
 
 // Import your onboarding screen here
-import 'package:vitastream/screens/onboarding_login_screen.dart';  // Adjust path accordingly
+// Adjust path accordingly
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

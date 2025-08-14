@@ -7,10 +7,10 @@ class AnimatedGradientBackground extends StatefulWidget {
   final ScrollController scrollController;
 
   const AnimatedGradientBackground({
-    Key? key,
+    super.key,
     required this.child,
     required this.scrollController,
-  }) : super(key: key);
+  });
 
   @override
   State<AnimatedGradientBackground> createState() =>

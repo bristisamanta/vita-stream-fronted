@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:animated_background/animated_background.dart';
-import '../main.dart';
 
 class OnboardingLoginScreen extends StatefulWidget {
   const OnboardingLoginScreen({super.key});
