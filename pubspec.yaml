@@ -16,12 +16,15 @@ dependencies:
   flutter_local_notifications: ^17.1.2
   flutter_map: ^6.0.1
   easy_localization: ^3.0.5
-  lottie: ^2.3.2
+  lottie: ^3.0.0
+  flutter_svg: ^2.0.9
   smooth_page_indicator: ^1.1.0
   animated_background: ^2.0.0
   google_maps_flutter: ^2.5.0
   geolocator: ^10.1.0
   url_launcher: ^6.2.5
+  http: ^1.2.1
+
 
 flutter:
   uses-material-design: true
@@ -31,6 +34,8 @@ flutter:
     - assets/lottie/bluetooth.json
     - assets/lottie/water_quality.json
     - assets/lottie/login_button.json
+    - assets/lottie/scanning.json
+
 
 dev_dependencies:
   flutter_test:

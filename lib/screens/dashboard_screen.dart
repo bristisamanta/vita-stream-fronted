@@ -201,7 +201,7 @@ class _DashboardScreenState extends State<DashboardScreen>
               const Icon(Icons.water_drop, color: Colors.white),
               const SizedBox(width: 8),
               const Text(
-                "Arogya.XI", // ✅ Your project name
+                "VitaStream", // ✅ Your project name
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
