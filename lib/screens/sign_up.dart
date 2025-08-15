@@ -10,6 +10,10 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
 
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController otpController = TextEditingController();
+  bool otpSent = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,12 +57,54 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       decoration: _inputDecoration("Full Name"),
                     ),
                     const SizedBox(height: 16),
-                    // Email
+                    // Phone Number
                     TextFormField(
-                      decoration: _inputDecoration("Email"),
-                      keyboardType: TextInputType.emailAddress,
+                      controller: phoneController,
+                      decoration: _inputDecoration("Phone Number"),
+                      keyboardType: TextInputType.phone,
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 8),
+                    // Send OTP Button
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {
+                          if (phoneController.text.isNotEmpty) {
+                            setState(() {
+                              otpSent = true;
+                            });
+                            // TODO: Send OTP logic
+                          }
+                        },
+                        child: const Text(
+                          "Send OTP",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    // OTP Field (only shown after sending)
+                    if (otpSent) ...[
+                      TextFormField(
+                        controller: otpController,
+                        decoration: _inputDecoration("Enter OTP"),
+                        keyboardType: TextInputType.number,
+                      ),
+                      const SizedBox(height: 8),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            // TODO: Verify OTP logic
+                          },
+                          child: const Text(
+                            "Verify OTP",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
                     // Username
                     TextFormField(
                       decoration: _inputDecoration("Username"),
