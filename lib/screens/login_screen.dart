@@ -48,25 +48,40 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 24),
+
                     // Phone or Username
                     TextFormField(
                       decoration: _inputDecoration("Phone or Username"),
                       keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter your phone or username";
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 16),
+
                     // Password
                     TextFormField(
                       decoration: _inputDecoration("Password"),
                       obscureText: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter your password";
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 24),
+
                     // Login Button
                     MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
-                            // Handle login logic here
+                            Navigator.pushNamed(context, "/dashboard");
                           }
                         },
                         child: Container(
@@ -89,6 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
+
                     // Forgot password
                     MouseRegion(
                       cursor: SystemMouseCursors.click,
@@ -106,6 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
+
                     // Don't have account
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

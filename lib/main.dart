@@ -3,9 +3,9 @@ import 'screens/pairing_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/onboarding_login_screen.dart';
 import 'screens/login_screen.dart';
-import 'screens/dashboard_screen.dart'; // ✅ Import DashboardScreen
+import 'screens/dashboard_screen.dart';
 import 'screens/map_screen.dart';
-import 'screens/sign_up.dart'; // ✅ New Import for Sign Up Screen
+import 'screens/sign_up.dart';
 
 void navigateWithAnimation(BuildContext context, Widget page) {
   Navigator.of(context).pushReplacement(
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         '/onboarding': (context) => const OnboardingLoginScreen(),
         '/login': (context) => const LoginScreen(),
-        '/signup': (context) => const SignUpScreen(), // ✅ Added Sign Up route
+        '/signup': (context) => const SignupScreen(), // ✅ Fixed route
         '/dashboard': (context) => const NavigationWrapper(initialIndex: 1),
       },
     );
