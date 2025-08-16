@@ -1,11 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
+import 'package:provider/provider.dart';
+import '../theme_state.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+AppBar buildDashboardAppBar(
+  BuildContext context,
+  Animation<double> titleAnimation,
+) {
+  final themeProvider = Provider.of<ThemeProvider>(context);
+
+  return AppBar(
+    elevation: 0,
+    backgroundColor: themeProvider.isDarkMode
+        ? Colors.black
+        : Colors.green.shade400,
+    title: ScaleTransition(
+      scale: titleAnimation,
+      child: Row(
+        children: [
+          const Icon(Icons.water_drop, color: Colors.white),
+          const SizedBox(width: 8),
+          const Text(
+            "VitaStream",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    ),
+    actions: [
+      // 🌙 Dark / Light toggle
+      Padding(
+        padding: const EdgeInsets.only(right: 16.0),
+        child: GestureDetector(
+          onTap: () => themeProvider.toggleTheme(),
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 400),
+            transitionBuilder: (child, anim) => RotationTransition(
+              turns: child.key == const ValueKey('dark')
+                  ? Tween<double>(begin: 1, end: 0.75).animate(anim)
+                  : Tween<double>(begin: 0.75, end: 1).animate(anim),
+              child: FadeTransition(opacity: anim, child: child),
+            ),
+            child: themeProvider.isDarkMode
+                ? const Icon(
+                    Icons.nightlight_round,
+                    key: ValueKey('dark'),
+                    color: Colors.white,
+                    size: 26,
+                  )
+                : const Icon(
+                    Icons.wb_sunny,
+                    key: ValueKey('light'),
+                    color: Colors.white,
+                    size: 26,
+                  ),
+          ),
+        ),
+      ),
+      IconButton(
+        icon: const Icon(Icons.settings),
+        onPressed: () {
+          Navigator.pushNamed(context, "/settings");
+        },
+      ),
+
+      IconButton(icon: const Icon(Icons.person), onPressed: () {}),
+    ],
+  );
 }
 
 class _DashboardScreenState extends State<DashboardScreen>
@@ -27,6 +95,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     const Center(child: Text("Map Screen Placeholder")),
     const Center(child: Text("Dashboard Screen Placeholder")),
     const Center(child: Text("Profile Screen Placeholder")),
+    const Center(child: Text("Tips Screen Placeholder")),
   ];
 
   @override
@@ -57,17 +126,14 @@ class _DashboardScreenState extends State<DashboardScreen>
       scale: Tween<double>(begin: 0.7, end: 1.0).animate(
         CurvedAnimation(
           parent: _controller,
-          curve: Interval(
-            index * 0.1,
-            1.0,
-            curve: Curves.elasticOut,
-          ),
+          curve: Interval(index * 0.1, 1.0, curve: Curves.elasticOut),
         ),
       ),
       child: OpenContainer(
         closedElevation: 3,
-        closedShape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        closedShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
         closedColor: Colors.white,
         transitionDuration: const Duration(milliseconds: 500),
         openBuilder: (context, _) => Scaffold(
@@ -82,10 +148,7 @@ class _DashboardScreenState extends State<DashboardScreen>
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               gradient: LinearGradient(
-                colors: [
-                  Colors.green.shade300,
-                  Colors.yellow.shade200,
-                ],
+                colors: [Colors.green.shade300, Colors.yellow.shade200],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -123,10 +186,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Colors.green.shade50,
-            Colors.yellow.shade50,
-          ],
+          colors: [Colors.green.shade50, Colors.yellow.shade50],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -201,22 +261,18 @@ class _DashboardScreenState extends State<DashboardScreen>
               const Icon(Icons.water_drop, color: Colors.white),
               const SizedBox(width: 8),
               const Text(
-                "VitaStream", // ✅ Your project name
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                "VitaStream", // ✅ Project name
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {},
-          ),
+          IconButton(icon: const Icon(Icons.settings), onPressed: () {}),
+          IconButton(icon: const Icon(Icons.person), onPressed: () {}),
         ],
       ),
       body: _selectedIndex == 1
@@ -231,18 +287,22 @@ class _DashboardScreenState extends State<DashboardScreen>
             _selectedIndex = index;
           });
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: "Map",
+            icon: Icon(Icons.bluetooth, size: 26),
+            label: 'Pair',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: "Dashboard",
+            icon: Icon(Icons.dashboard, size: 26),
+            label: 'Dashboard',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profile",
+            icon: Icon(Icons.map, size: 26),
+            label: 'Map',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.lightbulb, size: 26),
+            label: 'Tips',
           ),
         ],
       ),

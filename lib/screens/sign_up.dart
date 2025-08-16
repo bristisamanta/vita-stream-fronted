@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'login_screen.dart';
+import 'dashboard_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -8,151 +10,166 @@ class SignupScreen extends StatefulWidget {
   State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _SignupScreenState extends State<SignupScreen>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _otpController = TextEditingController();
+  bool _locationAccess = false;
+
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 4))
+          ..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _signUp() async {
+    if (_formKey.currentState!.validate()) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool("isLoggedIn", true); // ✅ Save login state
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const DashboardScreen()),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueAccent,
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Container(
-            padding: const EdgeInsets.all(20),
+      body: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Container(
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.95),
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    "Sign Up",
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Name
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: _inputDecoration("Full Name"),
-                    validator: (value) =>
-                        value!.isEmpty ? "Please enter your name" : null,
-                  ),
-                  const SizedBox(height: 15),
-
-                  // Email
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: _inputDecoration("Email"),
-                    validator: (value) =>
-                        value!.isEmpty ? "Please enter your email" : null,
-                  ),
-                  const SizedBox(height: 15),
-
-                  // Password
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: _inputDecoration("Password"),
-                    validator: (value) =>
-                        value!.isEmpty ? "Please enter a password" : null,
-                  ),
-                  const SizedBox(height: 15),
-
-                  // Confirm Password
-                  TextFormField(
-                    controller: _confirmPasswordController,
-                    obscureText: true,
-                    decoration: _inputDecoration("Confirm Password"),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Please confirm your password";
-                      } else if (value != _passwordController.text) {
-                        return "Passwords do not match";
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Sign Up button
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LoginScreen(),
-                            ),
-                          );
-                        }
-                      },
-                      child: const Text(
-                        "Sign Up",
-                        style: TextStyle(fontSize: 18, color: Colors.white),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  // Already have an account
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Already have an account? "),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LoginScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          "Login",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blueAccent,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.blueAccent.withOpacity(0.7 + 0.3 * _controller.value),
+                  Colors.teal.withOpacity(0.7 + 0.3 * (1 - _controller.value)),
                 ],
               ),
             ),
-          ),
-        ),
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(24.0),
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          "Sign Up",
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Name
+                        TextFormField(
+                          controller: _nameController,
+                          decoration: _inputDecoration("Full Name"),
+                          validator: (value) =>
+                              value!.isEmpty ? "Enter your name" : null,
+                        ),
+                        const SizedBox(height: 15),
+
+                        // Phone
+                        TextFormField(
+                          controller: _phoneController,
+                          decoration: _inputDecoration("Phone Number"),
+                          keyboardType: TextInputType.phone,
+                          validator: (value) =>
+                              value!.isEmpty ? "Enter phone number" : null,
+                        ),
+                        const SizedBox(height: 15),
+
+                        // OTP
+                        TextFormField(
+                          controller: _otpController,
+                          decoration: _inputDecoration("Enter OTP"),
+                          keyboardType: TextInputType.number,
+                          validator: (value) =>
+                              value!.isEmpty ? "Enter OTP" : null,
+                        ),
+                        const SizedBox(height: 15),
+
+                        // Location Access
+                        CheckboxListTile(
+                          title: const Text("Allow location access"),
+                          value: _locationAccess,
+                          onChanged: (val) {
+                            setState(() {
+                              _locationAccess = val ?? false;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Sign Up Button
+                        ElevatedButton(
+                          onPressed: _signUp,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            minimumSize: const Size(double.infinity, 50),
+                          ),
+                          child: const Text("Sign Up"),
+                        ),
+                        const SizedBox(height: 10),
+
+                        // Already have account
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text("Already have an account? "),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const LoginScreen(),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                "Login",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blueAccent),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -160,17 +177,9 @@ class _SignupScreenState extends State<SignupScreen> {
   InputDecoration _inputDecoration(String label) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(color: Colors.black87),
-      enabledBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.black54),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.black),
-        borderRadius: BorderRadius.circular(8),
-      ),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       filled: true,
-      fillColor: Colors.white.withOpacity(0.9),
+      fillColor: Colors.white,
     );
   }
 }

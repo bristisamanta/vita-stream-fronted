@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vitastream/screens/tips_screen.dart';
+import 'screens/settings_screen.dart';
+import 'theme_state.dart';
 import 'screens/pairing_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/onboarding_login_screen.dart';
@@ -7,30 +11,13 @@ import 'screens/dashboard_screen.dart';
 import 'screens/map_screen.dart';
 import 'screens/sign_up.dart';
 
-void navigateWithAnimation(BuildContext context, Widget page) {
-  Navigator.of(context).pushReplacement(
-    PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(0.0, 1.0);
-        const end = Offset.zero;
-        const curve = Curves.easeInOut;
-
-        var tween =
-            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
-      },
-      transitionDuration: const Duration(milliseconds: 500),
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: const MyApp(),
     ),
   );
-}
-
-void main() {
-  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -38,15 +25,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      themeMode: themeProvider.currentTheme,
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: Colors.teal,
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.teal,
+      ),
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),
         '/onboarding': (context) => const OnboardingLoginScreen(),
         '/login': (context) => const LoginScreen(),
-        '/signup': (context) => const SignupScreen(), // ✅ Fixed route
+        '/signup': (context) => const SignupScreen(),
         '/dashboard': (context) => const NavigationWrapper(initialIndex: 1),
+         '/settings': (context) => const SettingsScreen(),
+         '/tips': (context) => const TipsScreen(),
       },
     );
   }
@@ -73,6 +73,7 @@ class _NavigationWrapperState extends State<NavigationWrapper> {
     const PairingScreen(),
     const DashboardScreen(),
     const MapScreen(),
+    const TipsScreen(),
   ];
 
   void _onItemTapped(int index) {

@@ -1,160 +1,179 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dashboard_screen.dart';
+import 'sign_up.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _otpController = TextEditingController();
+
+  late AnimationController _controller;
+
+  bool otpSent = false;
+  String generatedOtp = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 4))
+          ..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _phoneController.dispose();
+    _otpController.dispose();
+    super.dispose();
+  }
+
+  // Save login state
+  Future<void> _saveLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("isLoggedIn", true);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF0f2027), // dark teal-green
-              Color(0xFF2c5364), // deep bluish
-              Color(0xFF203a43), // deep teal
-            ],
-          ),
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.55,
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.7),
-                borderRadius: BorderRadius.circular(16),
+      body: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  Colors.purple.withOpacity(0.6 + 0.4 * _controller.value),
+                  Colors.indigo.withOpacity(0.6 + 0.4 * (1 - _controller.value)),
+                ],
               ),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Welcome Back",
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Phone or Username
-                    TextFormField(
-                      decoration: _inputDecoration("Phone or Username"),
-                      keyboardType: TextInputType.text,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please enter your phone or username";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Password
-                    TextFormField(
-                      decoration: _inputDecoration("Password"),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please enter your password";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Login Button
-                    MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () {
-                          if (_formKey.currentState!.validate()) {
-                            Navigator.pushNamed(context, "/dashboard");
-                          }
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF2c5364),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          alignment: Alignment.center,
-                          child: const Text(
-                            "Login",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Forgot password
-                    MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () {
-                          // Forgot password logic
-                        },
-                        child: const Text(
-                          "Forgot Password?",
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Don't have account
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+            ),
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(24.0),
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
                       children: [
                         const Text(
-                          "Don't have an account? ",
-                          style: TextStyle(color: Colors.black87),
+                          "Login",
+                          style: TextStyle(
+                              fontSize: 26, fontWeight: FontWeight.bold),
                         ),
-                        MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, "/signup");
-                            },
-                            child: const Text(
-                              "Sign Up",
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                color: Colors.black87,
-                                fontWeight: FontWeight.bold,
+                        const SizedBox(height: 20),
+
+                        // Phone Number
+                        TextFormField(
+                          controller: _phoneController,
+                          decoration: _inputDecoration("Phone Number"),
+                          keyboardType: TextInputType.phone,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter phone number";
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+
+                        // OTP (only show if OTP is sent)
+                        if (otpSent)
+                          TextFormField(
+                            controller: _otpController,
+                            decoration: _inputDecoration("Enter OTP"),
+                            keyboardType: TextInputType.number,
+                          ),
+
+                        const SizedBox(height: 24),
+
+                        // Get OTP / Login Button
+                        ElevatedButton(
+                          onPressed: () {
+                            if (!_formKey.currentState!.validate()) return;
+
+                            if (!otpSent) {
+                              // Fake OTP generator
+                              generatedOtp = "1234";
+                              setState(() {
+                                otpSent = true;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("OTP sent: $generatedOtp")),
+                              );
+                            } else {
+                              if (_otpController.text == generatedOtp) {
+                                _saveLogin();
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const DashboardScreen()),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text("Invalid OTP")),
+                                );
+                              }
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.indigo,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            minimumSize: const Size(double.infinity, 50),
+                          ),
+                          child: Text(otpSent ? "Login" : "Get OTP"),
+                        ),
+                        const SizedBox(height: 10),
+
+                        // No account? Signup
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text("Don't have an account? "),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const SignupScreen(),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                "Sign Up",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.indigo),
                               ),
                             ),
-                          ),
-                        ),
+                          ],
+                        )
                       ],
-                    )
-                  ],
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -162,17 +181,9 @@ class _LoginScreenState extends State<LoginScreen> {
   InputDecoration _inputDecoration(String label) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(color: Colors.black87),
-      enabledBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.black54),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.black),
-        borderRadius: BorderRadius.circular(8),
-      ),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       filled: true,
-      fillColor: Colors.white.withOpacity(0.9),
+      fillColor: Colors.white,
     );
   }
 }
