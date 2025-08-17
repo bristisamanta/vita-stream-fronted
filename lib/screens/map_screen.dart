@@ -16,9 +16,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   String _filter = "All";
   bool _offline = false;
 
-  late AnimationController rippleController;
-  late Animation<double> rippleAnimation;
-
   List<Map<String, dynamic>> waterSources = [
     {
       "name": "Community Well A",
@@ -53,22 +50,12 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _simulateLiveUpdates();
-
-    // Ripple animation for safe markers
-    rippleController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 2))
-          ..repeat(reverse: false);
-    rippleAnimation =
-        Tween<double>(begin: 0.8, end: 1.4).animate(CurvedAnimation(
-      parent: rippleController,
-      curve: Curves.easeOut,
-    ));
   }
 
   void _simulateLiveUpdates() {
     Timer.periodic(const Duration(seconds: 30), (timer) {
       setState(() {
-        waterSources[0]["tds"] = (300 + (50 - 25)).toDouble();
+        waterSources[0]["tds"] = 320; // fake update
         waterSources[0]["lastUpdated"] = "Just now";
       });
     });
@@ -153,19 +140,19 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         setState(() => _offline = true);
-        return Future.error('Location services are disabled');
+        return Future.error('Location services disabled');
       }
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
           setState(() => _offline = true);
-          return Future.error('Location permissions are denied');
+          return Future.error('Location permissions denied');
         }
       }
       if (permission == LocationPermission.deniedForever) {
         setState(() => _offline = true);
-        return Future.error('Location permissions are permanently denied');
+        return Future.error('Location permanently denied');
       }
       setState(() => _offline = false);
       return await Geolocator.getCurrentPosition();
@@ -187,58 +174,72 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("VitaStream Map"),
-        backgroundColor: Colors.green.shade300,
-        actions: [
-          DropdownButton<String>(
-            value: _filter,
-            underline: const SizedBox(),
-            dropdownColor: Colors.white,
-            onChanged: (value) => setState(() => _filter = value!),
-            items: ["All", "Safe", "Unsafe", "Unknown"]
-                .map((f) => DropdownMenuItem(value: f, child: Text(f)))
-                .toList(),
-          )
-        ],
-      ),
-      body: Stack(
-        children: [
-          GoogleMap(
-            initialCameraPosition: const CameraPosition(
-              target: LatLng(26.1883, 91.6918),
-              zoom: 14,
-            ),
-            markers: _buildMarkers(),
-            myLocationEnabled: true,
-            myLocationButtonEnabled: false,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
+    return Stack(
+      children: [
+        GoogleMap(
+          initialCameraPosition: const CameraPosition(
+            target: LatLng(26.1883, 91.6918),
+            zoom: 14,
           ),
-          if (_offline)
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                color: Colors.red,
-                padding: const EdgeInsets.all(8),
-                child: const Text(
-                  "⚠ Offline: No location or data available",
-                  style: TextStyle(color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
+          markers: _buildMarkers(),
+          myLocationEnabled: true,
+          myLocationButtonEnabled: false,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+        ),
+        if (_offline)
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              color: Colors.red,
+              padding: const EdgeInsets.all(8),
+              child: const Text(
+                "⚠ Offline: No location or data available",
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
               ),
             ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _recenterMap,
-        backgroundColor: Colors.teal,
-        child: const Icon(Icons.my_location),
-      ),
+          ),
+        Positioned(
+          bottom: 20,
+          right: 20,
+          child: FloatingActionButton(
+            onPressed: _recenterMap,
+            backgroundColor: Colors.teal,
+            child: const Icon(Icons.my_location),
+          ),
+        ),
+        Positioned(
+          top: 10,
+          right: 10,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 6,
+                  offset: Offset(0, 3),
+                )
+              ],
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: DropdownButton<String>(
+              value: _filter,
+              underline: const SizedBox(),
+              onChanged: (value) => setState(() => _filter = value!),
+              items: ["All", "Safe", "Unsafe", "Unknown"]
+                  .map((f) =>
+                      DropdownMenuItem(value: f, child: Text(f)))
+                  .toList(),
+            ),
+          ),
+        )
+      ],
     );
   }
 }

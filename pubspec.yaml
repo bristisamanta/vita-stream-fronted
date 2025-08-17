@@ -26,18 +26,15 @@ dependencies:
   http: ^1.2.1
   provider: ^6.0.5
   shared_preferences: ^2.2.2
+  image_picker: ^1.1.1 
 
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/lottie/water_map.json
-    - assets/lottie/bluetooth.json
-    - assets/lottie/water_quality.json
-    - assets/lottie/login_button.json
-    - assets/lottie/scanning.json
-
+    - assets/images/
+    - assets/lottie/
 
 dev_dependencies:
   flutter_test:

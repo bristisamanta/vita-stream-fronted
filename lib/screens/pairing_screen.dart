@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-class PairingScreen extends StatefulWidget {
-  const PairingScreen({super.key});
-
-  @override
-  State<PairingScreen> createState() => _PairingScreenState();
-}
-
-// Custom painter for animated background waves
+// 🔹 Custom painter for animated background waves
 class WavePainter extends CustomPainter {
   final double progress;
   final bool isScanning;
@@ -37,22 +30,28 @@ class WavePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant WavePainter oldDelegate) {
-    return oldDelegate.progress != progress || oldDelegate.isScanning != isScanning;
+    return oldDelegate.progress != progress ||
+        oldDelegate.isScanning != isScanning;
   }
+}
+
+class PairingScreen extends StatefulWidget {
+  const PairingScreen({super.key});
+
+  @override
+  State<PairingScreen> createState() => _PairingScreenState();
 }
 
 class _PairingScreenState extends State<PairingScreen>
     with SingleTickerProviderStateMixin {
   final List<String> devices = ["Device_01", "Device_02", "Device_03"];
-  late AnimationController _waveController; // ✅ Declared
+  late AnimationController _waveController;
   bool isScanning = false;
   String status = "";
-  int selectedIndex = 1;
 
   @override
   void initState() {
     super.initState();
-    // ✅ Initialize _waveController here
     _waveController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
@@ -61,14 +60,8 @@ class _PairingScreenState extends State<PairingScreen>
 
   @override
   void dispose() {
-    _waveController.dispose(); // ✅ Dispose it
+    _waveController.dispose();
     super.dispose();
-  }
-
-  void onNavTap(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
   }
 
   void startScan() {
@@ -80,7 +73,8 @@ class _PairingScreenState extends State<PairingScreen>
     Future.delayed(const Duration(seconds: 4), () {
       setState(() {
         isScanning = false;
-        status = devices.isEmpty ? "No devices found ❌" : "Scan complete ✅";
+        status =
+            devices.isEmpty ? "No devices found ❌" : "Scan complete ✅";
       });
     });
   }
@@ -124,13 +118,15 @@ class _PairingScreenState extends State<PairingScreen>
           Expanded(
             child: Text(
               name,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.teal,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)),
             ),
             onPressed: () => connectToDevice(name),
             child: const Text("Connect"),
@@ -142,130 +138,102 @@ class _PairingScreenState extends State<PairingScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.teal.shade50,
-      appBar: AppBar(
-        title: const Text("Pair Device"),
-        backgroundColor: Colors.teal,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {},
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 20),
+    return Column(
+      children: [
+        const SizedBox(height: 20),
 
-          // Bluetooth with Lottie animation from assets
-          SizedBox(
-            height: 180,
-            width: 180,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // Background waves
-                AnimatedBuilder(
-                  animation: _waveController,
-                  builder: (_, __) {
-                    return CustomPaint(
-                      painter: WavePainter(
-                        progress: _waveController.value,
-                        isScanning: isScanning,
-                      ),
-                      size: const Size(180, 180),
-                    );
-                  },
-                ),
-
-                // Lottie animation
-                Lottie.asset(
-                  "assets/lottie/scanning.json", // Make sure path exists in pubspec.yaml
-                  height: 120,
-                  repeat: true,
-                ),
-              ],
-            ),
-          ),
-
-          // Status Text
-          if (status.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                status,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-
-          // Device List
-          Expanded(
-            child: devices.isEmpty && !isScanning
-                ? Center(
-                    child: Lottie.asset("assets/lottie/no-devices.json", height: 150),
-                  )
-                : ListView.builder(
-                    itemCount: devices.length,
-                    itemBuilder: (context, index) =>
-                        buildDeviceCard(devices[index]),
-                  ),
-          ),
-
-          // Scan Button
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: GestureDetector(
-              onTap: startScan,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 500),
-                width: double.infinity,
-                height: 55,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  gradient: const LinearGradient(
-                    colors: [Colors.teal, Colors.green],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  boxShadow: isScanning
-                      ? [
-                          BoxShadow(
-                            color: Colors.teal.withOpacity(0.6),
-                            blurRadius: 20,
-                            spreadRadius: 5,
-                          ),
-                        ]
-                      : [],
-                ),
-                child: Center(
-                  child: Text(
-                    isScanning ? "Scanning..." : "Scan Devices",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+        // Bluetooth with animated background + lottie
+        SizedBox(
+          height: 180,
+          width: 180,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              AnimatedBuilder(
+                animation: _waveController,
+                builder: (_, __) {
+                  return CustomPaint(
+                    painter: WavePainter(
+                      progress: _waveController.value,
+                      isScanning: isScanning,
                     ),
+                    size: const Size(180, 180),
+                  );
+                },
+              ),
+              Lottie.asset(
+                "assets/lottie/scanning.json",
+                height: 120,
+                repeat: true,
+              ),
+            ],
+          ),
+        ),
+
+        // Status text
+        if (status.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              status,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+
+        // Device list
+        Expanded(
+          child: devices.isEmpty && !isScanning
+              ? Center(
+                  child: Lottie.asset("assets/lottie/no-devices.json",
+                      height: 150),
+                )
+              : ListView.builder(
+                  itemCount: devices.length,
+                  itemBuilder: (context, index) =>
+                      buildDeviceCard(devices[index]),
+                ),
+        ),
+
+        // Scan button
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: GestureDetector(
+            onTap: startScan,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 500),
+              width: double.infinity,
+              height: 55,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                gradient: const LinearGradient(
+                  colors: [Colors.teal, Colors.green],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                boxShadow: isScanning
+                    ? [
+                        BoxShadow(
+                          color: Colors.teal.withOpacity(0.6),
+                          blurRadius: 20,
+                          spreadRadius: 5,
+                        ),
+                      ]
+                    : [],
+              ),
+              child: Center(
+                child: Text(
+                  isScanning ? "Scanning..." : "Scan Devices",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                   ),
                 ),
               ),
             ),
           ),
-        ],
-      ),
-
-      // Bottom Navigation
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIndex,
-        selectedItemColor: Colors.teal,
-        unselectedItemColor: Colors.grey,
-        onTap: onNavTap,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: "Dashboard"),
-          BottomNavigationBarItem(icon: Icon(Icons.map), label: "Map"),
-          BottomNavigationBarItem(icon: Icon(Icons.lightbulb), label: "Tips"),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

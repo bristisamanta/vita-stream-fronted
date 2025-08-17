@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-
-// Import your onboarding screen here
-// Adjust path accordingly
+import 'package:shared_preferences/shared_preferences.dart';
+import 'onboarding_login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,25 +16,34 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _fadeAnimation;
 
   @override
-void initState() {
-  super.initState();
+  void initState() {
+    super.initState();
 
-  // Animation setup
-  _controller = AnimationController(
-    duration: const Duration(seconds: 4),
-    vsync: this,
-  )..repeat();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 4),
+      vsync: this,
+    )..repeat();
 
-  _fadeAnimation = CurvedAnimation(
-    parent: _controller,
-    curve: Curves.easeIn,
-  );
+    _fadeAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeIn,
+    );
 
-  // Navigate after delay (using named route)
-  Timer(const Duration(seconds: 3), () {
-    Navigator.pushReplacementNamed(context, '/onboarding');
-  });
-}
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isLoggedIn = prefs.getBool("isLoggedIn") ?? false;
+
+    Timer(const Duration(seconds: 3), () {
+      if (isLoggedIn) {
+        Navigator.pushReplacementNamed(context, "/dashboard");
+      } else {
+        Navigator.pushReplacementNamed(context, "/onboarding");
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -48,39 +56,21 @@ void initState() {
     return Scaffold(
       body: Stack(
         children: [
-          // Gradient background
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  Color(0xFFB7D3C6), // Sage green
-                  Color(0xFFB3E5FC), // Sky blue
-                ],
+                colors: [Color(0xFFB7D3C6), Color(0xFFB3E5FC)],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
             ),
           ),
-
-          // Moving Waves
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return CustomPaint(
-                painter: WavePainter(_controller.value),
-                size: Size.infinite,
-              );
-            },
-          ),
-
-          // Logo & text
           Center(
             child: FadeTransition(
               opacity: _fadeAnimation,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Logo in Card
                   Card(
                     elevation: 4,
                     color: Colors.white.withOpacity(0.8),
@@ -89,11 +79,7 @@ void initState() {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(20),
-                      child: Icon(
-                        Icons.water_drop,
-                        size: 80,
-                        color: Colors.teal.shade700,
-                      ),
+                      child: Icon(Icons.water_drop, size: 80, color: Colors.teal.shade700),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -104,13 +90,6 @@ void initState() {
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                       color: Colors.white,
-                      shadows: [
-                        Shadow(
-                          blurRadius: 4.0,
-                          color: Colors.black26,
-                          offset: Offset(1, 1),
-                        )
-                      ],
                     ),
                   ),
                 ],
@@ -121,45 +100,4 @@ void initState() {
       ),
     );
   }
-}
-
-// WavePainter remains unchanged
-class WavePainter extends CustomPainter {
-  final double animationValue;
-
-  WavePainter(this.animationValue);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.white.withOpacity(0.2);
-    final path = Path();
-
-    const waveHeight = 20.0;
-    const waveLength = 200.0; // Smaller = more waves
-
-    path.moveTo(0, size.height * 0.8);
-    for (double i = 0; i <= size.width + waveLength; i += waveLength) {
-      path.quadraticBezierTo(
-        i + waveLength / 4 - animationValue * waveLength,
-        size.height * 0.8 - waveHeight,
-        i + waveLength / 2 - animationValue * waveLength,
-        size.height * 0.8,
-      );
-      path.quadraticBezierTo(
-        i + 3 * waveLength / 4 - animationValue * waveLength,
-        size.height * 0.8 + waveHeight,
-        i + waveLength - animationValue * waveLength,
-        size.height * 0.8,
-      );
-    }
-
-    path.lineTo(size.width, size.height);
-    path.lineTo(0, size.height);
-    path.close();
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant WavePainter oldDelegate) => true;
 }

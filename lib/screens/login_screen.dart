@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dashboard_screen.dart';
-import 'sign_up.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,12 +11,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
-
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _otpController = TextEditingController();
 
   late AnimationController _controller;
-
   bool otpSent = false;
   String generatedOtp = "";
 
@@ -38,7 +34,6 @@ class _LoginScreenState extends State<LoginScreen>
     super.dispose();
   }
 
-  // Save login state
   Future<void> _saveLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool("isLoggedIn", true);
@@ -57,7 +52,8 @@ class _LoginScreenState extends State<LoginScreen>
                 end: Alignment.bottomLeft,
                 colors: [
                   Colors.purple.withOpacity(0.6 + 0.4 * _controller.value),
-                  Colors.indigo.withOpacity(0.6 + 0.4 * (1 - _controller.value)),
+                  const Color.fromARGB(212, 149, 163, 247)
+                      .withOpacity(0.6 + 0.4 * (1 - _controller.value)),
                 ],
               ),
             ),
@@ -81,21 +77,19 @@ class _LoginScreenState extends State<LoginScreen>
                         ),
                         const SizedBox(height: 20),
 
-                        // Phone Number
+                        // Phone
                         TextFormField(
                           controller: _phoneController,
                           decoration: _inputDecoration("Phone Number"),
                           keyboardType: TextInputType.phone,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Please enter phone number";
-                            }
-                            return null;
-                          },
+                          validator: (value) =>
+                              value == null || value.isEmpty
+                                  ? "Please enter phone number"
+                                  : null,
                         ),
                         const SizedBox(height: 16),
 
-                        // OTP (only show if OTP is sent)
+                        // OTP
                         if (otpSent)
                           TextFormField(
                             controller: _otpController,
@@ -105,58 +99,52 @@ class _LoginScreenState extends State<LoginScreen>
 
                         const SizedBox(height: 24),
 
-                        // Get OTP / Login Button
+                        // Button
                         ElevatedButton(
                           onPressed: () {
                             if (!_formKey.currentState!.validate()) return;
 
                             if (!otpSent) {
-                              // Fake OTP generator
-                              generatedOtp = "1234";
-                              setState(() {
-                                otpSent = true;
-                              });
+                              generatedOtp = "1234"; // Fake OTP
+                              setState(() => otpSent = true);
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("OTP sent: $generatedOtp")),
+                                SnackBar(
+                                    content:
+                                        Text("OTP sent: $generatedOtp")),
                               );
                             } else {
                               if (_otpController.text == generatedOtp) {
                                 _saveLogin();
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => const DashboardScreen()),
-                                );
+                                // ✅ Go to Dashboard
+                                Navigator.pushReplacementNamed(
+                                    context, "/dashboard");
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text("Invalid OTP")),
+                                  const SnackBar(
+                                      content: Text("Invalid OTP")),
                                 );
                               }
                             }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.indigo,
-                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            padding:
+                                const EdgeInsets.symmetric(vertical: 14),
                             minimumSize: const Size(double.infinity, 50),
                           ),
                           child: Text(otpSent ? "Login" : "Get OTP"),
                         ),
+
                         const SizedBox(height: 10),
 
-                        // No account? Signup
+                        // Sign up link
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Text("Don't have an account? "),
                             GestureDetector(
-                              onTap: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const SignupScreen(),
-                                  ),
-                                );
-                              },
+                              onTap: () => Navigator.pushReplacementNamed(
+                                  context, "/signup"),
                               child: const Text(
                                 "Sign Up",
                                 style: TextStyle(
