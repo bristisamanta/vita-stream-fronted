@@ -147,6 +147,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   [Colors.orange, Colors.red]),
               _buildFeatureCard("assets/images/map.png", "Safe Sources",
                   [Colors.green, Colors.teal]),
+
+              // ✅ NEW ALERT CARD ADDED
+              _buildFeatureCard(
+                "assets/images/alert.png", // agar nahi hai to "assets/images/alarm.png" use karna
+                "Alerts",
+                [Colors.red, Colors.deepOrange],
+                onTap: () {
+                  Navigator.pushNamed(context, "/alert");
+                },
+              ),
             ],
           ),
         ],
