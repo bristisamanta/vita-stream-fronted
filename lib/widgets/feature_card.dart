@@ -19,7 +19,7 @@ class FeatureCard extends StatefulWidget {
 }
 
 class _FeatureCardState extends State<FeatureCard> {
-  bool _hover = false;
+  final bool _hover = false;
 
   @override
   Widget build(BuildContext context) {

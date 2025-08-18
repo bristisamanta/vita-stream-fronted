@@ -127,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen>
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.indigo,
+                            backgroundColor: const Color.fromARGB(255, 194, 190, 255),
                             padding:
                                 const EdgeInsets.symmetric(vertical: 14),
                             minimumSize: const Size(double.infinity, 50),
@@ -149,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen>
                                 "Sign Up",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.indigo),
+                                    color: Color.fromARGB(255, 87, 69, 135)),
                               ),
                             ),
                           ],

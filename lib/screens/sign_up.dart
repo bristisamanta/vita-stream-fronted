@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart'; // ✅ Added for WhatsApp
 import 'login_screen.dart';
 import 'dashboard_screen.dart';
+import 'dart:math'; // ✅ For OTP generation
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -17,6 +19,7 @@ class _SignupScreenState extends State<SignupScreen>
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _otpController = TextEditingController();
   bool _locationAccess = false;
+  String? _generatedOtp; // ✅ Store OTP
 
   late AnimationController _controller;
 
@@ -34,10 +37,42 @@ class _SignupScreenState extends State<SignupScreen>
     super.dispose();
   }
 
+  // ✅ Function to send OTP on WhatsApp
+  Future<void> _sendOtp() async {
+    if (_phoneController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please enter phone number")),
+      );
+      return;
+    }
+
+    // Generate random 6-digit OTP
+    _generatedOtp = (100000 + Random().nextInt(900000)).toString();
+
+    final phone = _phoneController.text;
+    final whatsappUrl = Uri.parse(
+        "https://wa.me/$phone?text=Your OTP is $_generatedOtp");
+
+    if (await canLaunchUrl(whatsappUrl)) {
+      await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("WhatsApp not installed")),
+      );
+    }
+  }
+
   Future<void> _signUp() async {
     if (_formKey.currentState!.validate()) {
+      if (_otpController.text != _generatedOtp) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Invalid OTP")),
+        );
+        return;
+      }
+
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool("isLoggedIn", true); // ✅ Save login state
+      await prefs.setBool("isLoggedIn", true);
 
       Navigator.pushReplacement(
         context,
@@ -59,7 +94,7 @@ class _SignupScreenState extends State<SignupScreen>
                 end: Alignment.bottomRight,
                 colors: [
                   Colors.blueAccent.withOpacity(0.7 + 0.3 * _controller.value),
-                  Colors.teal.withOpacity(0.7 + 0.3 * (1 - _controller.value)),
+                  const Color.fromARGB(255, 101, 183, 246).withOpacity(0.7 + 0.3 * (1 - _controller.value)),
                 ],
               ),
             ),
@@ -95,13 +130,29 @@ class _SignupScreenState extends State<SignupScreen>
                         ),
                         const SizedBox(height: 15),
 
-                        // Phone
-                        TextFormField(
-                          controller: _phoneController,
-                          decoration: _inputDecoration("Phone Number"),
-                          keyboardType: TextInputType.phone,
-                          validator: (value) =>
-                              value!.isEmpty ? "Enter phone number" : null,
+                        // Phone + Send OTP Button
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: _phoneController,
+                                decoration:
+                                    _inputDecoration("Phone Number (with country code)"),
+                                keyboardType: TextInputType.phone,
+                                validator: (value) => value!.isEmpty
+                                    ? "Enter phone number"
+                                    : null,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            ElevatedButton(
+                              onPressed: _sendOtp,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color.fromARGB(255, 130, 211, 255),
+                              ),
+                              child: const Text("Send OTP"),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 15),
 
