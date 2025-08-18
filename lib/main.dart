@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'theme_state.dart';
+
+// Screens
 import 'screens/splash_screen.dart';
 import 'screens/onboarding_login_screen.dart';
 import 'screens/login_screen.dart';
@@ -37,13 +39,18 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         primarySwatch: Colors.teal,
       ),
-      // Start with SplashScreen
-      home: const SplashScreen(),
+
+      // ✅ Start with SplashScreen
+      initialRoute: '/',
       routes: {
+        '/': (context) => const SplashScreen(),
         '/onboarding': (context) => const OnboardingLoginScreen(),
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignupScreen(),
-        '/dashboard': (context) => const DashboardScreen(),
+        
+        // ✅ Your real dashboard with bottom navigation
+        '/dashboard': (context) => const DashboardScreen(), 
+        
         '/settings': (context) => const SettingsScreen(),
         '/tips': (context) => const TipsScreen(),
         '/profile': (context) => const ProfileScreen(),
