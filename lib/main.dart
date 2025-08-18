@@ -11,6 +11,7 @@ import 'screens/dashboard_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/tips_screen.dart';
 import 'screens/profile_screen.dart';
+import 'screens/alert_screen.dart'; // ✅ Added AlertScreen import
 
 void main() {
   runApp(
@@ -54,6 +55,9 @@ class MyApp extends StatelessWidget {
         '/settings': (context) => const SettingsScreen(),
         '/tips': (context) => const TipsScreen(),
         '/profile': (context) => const ProfileScreen(),
+        
+        // ✅ New route for Alerts
+        '/alert': (context) => const AlertScreen(),
       },
     );
   }

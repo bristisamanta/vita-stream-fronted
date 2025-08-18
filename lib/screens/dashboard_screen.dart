@@ -19,14 +19,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
-    final List<Widget> _pages = [
+    final List<Widget> pages = [
       const PairingScreen(),
       _buildDashboardPage(themeProvider),
       const MapScreen(),
       const TipsScreen(),
     ];
 
-    final List<String> _titles = [
+    final List<String> titles = [
       "Pair Device",
       "VitaStream",
       "Safe Water Sources",
@@ -47,7 +47,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             const Icon(Icons.water_drop, color: Colors.white),
             const SizedBox(width: 8),
             Text(
-              _titles[_selectedIndex],
+              titles[_selectedIndex],
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -74,7 +74,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         transitionBuilder: (child, animation) {
           return FadeTransition(opacity: animation, child: child);
         },
-        child: _pages[_selectedIndex],
+        child: pages[_selectedIndex],
       ),
 
       bottomNavigationBar: ClipRRect(
@@ -200,9 +200,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   // ✅ Feature Card
   Widget _buildFeatureCard(
-      String imagePath, String title, List<Color> gradientColors) {
+      String imagePath, String title, List<Color> gradientColors,
+      {VoidCallback? onTap}) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap ?? () {},
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: AnimatedContainer(
