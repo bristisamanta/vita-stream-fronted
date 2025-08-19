@@ -5,7 +5,6 @@ import 'theme_state.dart';
 // ✅ Correct import (without lib/)
 import 'package:vitastream/utils/permission_handler.dart';
 
-
 // Screens
 import 'screens/splash_screen.dart';
 import 'screens/onboarding_login_screen.dart';
@@ -21,7 +20,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // ✅ Request BLE permissions before app runs
-  await PermissionUtils.requestBluetoothPermissions();
+  await AppPermissions.requestBluetoothPermissions(); // <-- fixed
 
   runApp(
     ChangeNotifierProvider(
@@ -30,8 +29,6 @@ void main() async {
     ),
   );
 }
-
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
