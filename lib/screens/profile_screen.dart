@@ -82,10 +82,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 4),
-                const Text(
-                  "Engineering Student | Frontend Dev",
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                ),
               ],
             ),
           ),
@@ -109,23 +105,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             child: Column(
               children: const [
-                ListTile(
-                  leading: Icon(Icons.email, color: Colors.teal),
-                  title: Text("Email"),
-                  subtitle: Text("bristi@example.com"),
-                ),
+                
                 Divider(),
                 ListTile(
                   leading: Icon(Icons.phone, color: Colors.teal),
                   title: Text("Phone"),
                   subtitle: Text("+91 9876543210"),
                 ),
-                Divider(),
-                ListTile(
-                  leading: Icon(Icons.school, color: Colors.teal),
-                  title: Text("Education"),
-                  subtitle: Text("B.Tech in Engineering"),
-                ),
+               
               ],
             ),
           ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'theme_state.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-// ✅ Correct import (without lib/)
+import 'theme_state.dart';
 import 'package:vitastream/utils/permission_handler.dart';
 
 // Screens
@@ -16,11 +16,35 @@ import 'screens/tips_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/alert_screen.dart';
 
+// ✅ Global notification plugin
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+// ✅ Navigator key (needed for redirect from notifications)
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // ✅ Request BLE permissions before app runs
-  await AppPermissions.requestBluetoothPermissions(); // <-- fixed
+  await AppPermissions.requestBluetoothPermissions();
+
+  // ✅ Initialize notifications
+  const AndroidInitializationSettings androidInit =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  const InitializationSettings initSettings =
+      InitializationSettings(android: androidInit);
+
+  await flutterLocalNotificationsPlugin.initialize(
+    initSettings,
+    onDidReceiveNotificationResponse: (NotificationResponse response) {
+      if (response.payload == "alert") {
+        // ✅ Navigate to AlertScreen when tapped
+        navigatorKey.currentState?.pushNamed("/alert");
+      }
+    },
+  );
 
   runApp(
     ChangeNotifierProvider(
@@ -38,6 +62,7 @@ class MyApp extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return MaterialApp(
+      navigatorKey: navigatorKey, // ✅ added for notification navigation
       debugShowCheckedModeBanner: false,
       themeMode: themeProvider.currentTheme,
       theme: ThemeData(
@@ -64,10 +89,9 @@ class MyApp extends StatelessWidget {
         '/tips': (context) => const TipsScreen(),
         '/profile': (context) => const ProfileScreen(),
 
-        // ✅ New route for Alerts
+        // ✅ Alerts screen
         '/alert': (context) => const AlertScreen(),
       },
     );
   }
 }
-

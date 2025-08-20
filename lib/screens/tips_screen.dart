@@ -149,8 +149,9 @@ class _TipsScreenState extends State<TipsScreen>
                 ),
                 child: Column(
                   children: [
-                    Lottie.network(
-                      "https://lottie.host/16a10ef0-d1b0-4d26-b3ab-1d6decbc3569/kws7WZ7S9e.json",
+                    Lottie.asset(
+                      "assets/lottie/fact.json",
+                      width: 100,
                       height: 100,
                       repeat: true,
                     ),
@@ -193,17 +194,17 @@ class _TipsScreenState extends State<TipsScreen>
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                      color: Colors.green.shade700)),
+                      color: const Color.fromARGB(255, 225, 233, 225))),
             ),
             const SizedBox(height: 8),
-            _buildTipItem("Boil water before drinking", "assets/icons/boil.svg",
+            _buildTipItem("Boil water before drinking", "assets/lottie/boil.json",
                 Colors.green),
             const SizedBox(height: 8),
-            _buildTipItem("Use proper water filters", "assets/icons/filter.svg",
+            _buildTipItem("Use proper water filters", "assets/lottie/filter.json",
                 Colors.teal),
             const SizedBox(height: 8),
             _buildTipItem("Store in clean, closed containers",
-                "assets/icons/container.svg", Colors.blue),
+                "assets/lottie/container.json", Colors.blue),
 
             const SizedBox(height: 20),
 
@@ -217,10 +218,10 @@ class _TipsScreenState extends State<TipsScreen>
                       color: Colors.red.shade700)),
             ),
             const SizedBox(height: 8),
-            _buildTipItem("Avoid drinking until tested",
-                "assets/icons/no-drink.svg", Colors.red),
+            _buildTipItem("Avoid drinking until tested", "assets/icons/warning.svg",
+                 Colors.red),
             const SizedBox(height: 8),
-            _buildTipItem("Report to local authority", "assets/icons/report.svg",
+            _buildTipItem("Report to local authority", "assets/icons/report.svg", 
                 Colors.orange),
 
             const SizedBox(height: 20),
