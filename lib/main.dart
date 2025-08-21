@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 // 🌍 Localization
@@ -20,9 +21,32 @@ import 'screens/alert_screen.dart';
 import 'providers/theme_provider.dart';
 import 'providers/locale_provider.dart';
 
+// ✅ Global navigator key
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-void main() {
+// ✅ Global notification plugin (imported in dashboard_screen.dart)
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 🔔 Initialize local notifications
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  const InitializationSettings initializationSettings =
+      InitializationSettings(android: initializationSettingsAndroid);
+
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveNotificationResponse: (NotificationResponse response) {
+      if (response.payload == "alert") {
+        navigatorKey.currentState?.pushNamed("/alert");
+      }
+    },
+  );
+
   runApp(
     MultiProvider(
       providers: [
@@ -46,9 +70,8 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
 
-      // ✅ Use themeProvider.themeMode
+      // ✅ Theme
       themeMode: themeProvider.themeMode,
-
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Colors.teal,

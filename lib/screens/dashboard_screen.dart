@@ -3,8 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lottie/lottie.dart';
 
+
 // ✅ Providers
 import '../providers/theme_provider.dart';
+import 'package:provider/provider.dart';
 import '../providers/locale_provider.dart';
 import '../theme_state.dart';
 
@@ -82,8 +84,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context); // ✅ Theme
-    final localeProvider = Provider.of<LocaleProvider>(context); // ✅ Locale
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);  // ✅ FIXED
+    final localeProvider = Provider.of<LocaleProvider>(context, listen: true); // (added listen too)
 
     final List<Widget> pages = [
       const PairingScreen(),
