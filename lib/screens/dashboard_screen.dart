@@ -6,9 +6,8 @@ import 'package:lottie/lottie.dart';
 
 // ✅ Providers
 import '../providers/theme_provider.dart';
-import 'package:provider/provider.dart';
 import '../providers/locale_provider.dart';
-import '../theme_state.dart';
+
 
 // ✅ Import the global plugin instance
 import '../main.dart'; // gives access to flutterLocalNotificationsPlugin
@@ -190,7 +189,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             if (isLoading)
               Center(
                 child: Lottie.asset(
-                  'assets/animations/loading.json',
+                  'assets/lottie/loading.json',
                   width: 100,
                   height: 100,
                 ),
@@ -236,7 +235,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Row(
             children: [
               Lottie.asset(
-                'assets/animations/alert.json',
+                'assets/lottie/alert.json',
                 width: 40,
                 height: 40,
                 repeat: true,
