@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:lottie/lottie.dart'; // ✅ Added for animations
+import 'package:lottie/lottie.dart';
+
+// ✅ Providers
+import '../providers/theme_provider.dart';
+import '../providers/locale_provider.dart';
 import '../theme_state.dart';
-import '../main.dart';
-import '../locale_provider.dart'; // ✅ Import locale provider
+
+// ✅ Import the global plugin instance
+import '../main.dart'; // gives access to flutterLocalNotificationsPlugin
+
+// Screens
 import 'pairing_screen.dart';
 import 'map_screen.dart';
 import 'tips_screen.dart';
@@ -18,19 +25,15 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 1; // Default = Dashboard
-  bool showRiskBanner = true; // 👈 state to control top notification
-  bool isLoading = false; // 👈 For showing animation while API loads
+  bool showRiskBanner = true;
+  bool isLoading = false;
 
-  // ✅ Example API call wrapped in try/catch
+  // ✅ Simulated API
   Future<void> fetchRiskData() async {
     setState(() => isLoading = true);
     try {
-      // Fake API delay
       await Future.delayed(const Duration(seconds: 2));
-
-      // Fake response (replace with your real API)
       final response = {"risk": true};
-
       if (response["risk"] == true) {
         setState(() => showRiskBanner = true);
       }
@@ -46,10 +49,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   // ✅ Local Notification
   Future<void> showAlertNotification() async {
-    const AndroidNotificationDetails androidDetails =
-        AndroidNotificationDetails(
+    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
       'alert_channel',
       'Water Alerts',
+      channelDescription: 'Notifications about unsafe water quality',
       importance: Importance.high,
       priority: Priority.high,
     );
@@ -57,6 +60,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const NotificationDetails platformDetails =
         NotificationDetails(android: androidDetails);
 
+    // ✅ works because we imported from main.dart
     await flutterLocalNotificationsPlugin.show(
       0,
       "Unsafe Water Quality!",
@@ -65,7 +69,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       payload: "alert",
     );
 
-    // Also show banner inside dashboard
     setState(() {
       showRiskBanner = true;
     });
@@ -74,17 +77,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    fetchRiskData(); // ✅ Call API when screen loads
+    fetchRiskData();
   }
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-    final localeProvider = Provider.of<LocaleProvider>(context); // ✅ LocaleProvider
+    final themeProvider = Provider.of<ThemeProvider>(context); // ✅ Theme
+    final localeProvider = Provider.of<LocaleProvider>(context); // ✅ Locale
 
     final List<Widget> pages = [
       const PairingScreen(),
-      _buildDashboardPage(context), // 👈 new dashboard page
+      _buildDashboardPage(context),
       const MapScreen(),
       const TipsScreen(),
     ];
@@ -135,12 +138,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ),
-
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 400),
         child: pages[_selectedIndex],
       ),
-
       bottomNavigationBar: ClipRRect(
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(24),
@@ -152,8 +153,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           selectedItemColor: Colors.teal,
           unselectedItemColor: Colors.grey,
           items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.bluetooth), label: "Pair"),
+            BottomNavigationBarItem(icon: Icon(Icons.bluetooth), label: "Pair"),
             BottomNavigationBarItem(
                 icon: Icon(Icons.dashboard), label: "Dashboard"),
             BottomNavigationBarItem(icon: Icon(Icons.map), label: "Map"),
@@ -165,7 +165,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  // ✅ Dashboard Page with Gradient + New Features + Risk Banner
+  // ✅ Dashboard Page
   Widget _buildDashboardPage(BuildContext context) {
     return Container(
       key: const ValueKey("dashboard"),
@@ -186,7 +186,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Column(
           children: [
             if (isLoading)
-              // ✅ Show Lottie loader while fetching API
               Center(
                 child: Lottie.asset(
                   'assets/animations/loading.json',
@@ -194,7 +193,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   height: 100,
                 ),
               ),
-            if (showRiskBanner) _buildRiskBanner(), // 👈 Top Risk Notification
+            if (showRiskBanner) _buildRiskBanner(),
             const SizedBox(height: 16),
             _buildProfileCard(),
             const SizedBox(height: 20),
@@ -211,11 +210,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  // ✅ Risk Notification Banner (Top of Dashboard)
+  // ✅ Risk Notification Banner
   Widget _buildRiskBanner() {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, "/alert"); // 👈 Goes to AlertScreen
+        Navigator.pushNamed(context, "/alert");
       },
       child: Dismissible(
         key: const ValueKey("riskBanner"),
@@ -234,7 +233,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           child: Row(
             children: [
-              // ✅ Replaced Icon with Lottie
               Lottie.asset(
                 'assets/animations/alert.json',
                 width: 40,
@@ -260,7 +258,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  // ✅ Profile Card (Clickable)
+  // ✅ Profile Card
   Widget _buildProfileCard() {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, "/profile"),
@@ -273,8 +271,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Row(
           children: const [
             CircleAvatar(
-                radius: 28,
-                backgroundImage: AssetImage("assets/images/profile.jpg")),
+              radius: 28,
+              backgroundImage: AssetImage("assets/images/profile.jpg"),
+            ),
             SizedBox(width: 16),
             Expanded(
               child: Text(
@@ -333,8 +332,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const [
-          Text("Farm Health Score",
-              style: TextStyle(fontWeight: FontWeight.bold)),
+          Text("Farm Health Score", style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(height: 8),
           LinearProgressIndicator(value: 0.75, minHeight: 12),
           SizedBox(height: 8),

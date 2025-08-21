@@ -16,7 +16,10 @@ import 'screens/tips_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/alert_screen.dart';
 
-// Providers (make sure you created ThemeProvider & LocaleProvider)
+// Providers
+import 'providers/theme_provider.dart';
+import 'providers/locale_provider.dart';
+
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
@@ -42,7 +45,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
-      themeMode: themeProvider.currentTheme,
+
+      // ✅ Use themeProvider.themeMode
+      themeMode: themeProvider.themeMode,
+
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Colors.teal,
