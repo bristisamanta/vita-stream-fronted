@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:lottie/lottie.dart'; // ✅ Added for animations
 import '../theme_state.dart';
 import '../main.dart';
+import '../locale_provider.dart'; // ✅ Import locale provider
 import 'pairing_screen.dart';
 import 'map_screen.dart';
 import 'tips_screen.dart';
@@ -17,6 +19,30 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 1; // Default = Dashboard
   bool showRiskBanner = true; // 👈 state to control top notification
+  bool isLoading = false; // 👈 For showing animation while API loads
+
+  // ✅ Example API call wrapped in try/catch
+  Future<void> fetchRiskData() async {
+    setState(() => isLoading = true);
+    try {
+      // Fake API delay
+      await Future.delayed(const Duration(seconds: 2));
+
+      // Fake response (replace with your real API)
+      final response = {"risk": true};
+
+      if (response["risk"] == true) {
+        setState(() => showRiskBanner = true);
+      }
+    } catch (e) {
+      debugPrint("API error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Failed to fetch risk data")),
+      );
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
 
   // ✅ Local Notification
   Future<void> showAlertNotification() async {
@@ -46,8 +72,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    fetchRiskData(); // ✅ Call API when screen loads
+  }
+
+  @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final localeProvider = Provider.of<LocaleProvider>(context); // ✅ LocaleProvider
 
     final List<Widget> pages = [
       const PairingScreen(),
@@ -74,6 +107,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
               color: Colors.white, fontWeight: FontWeight.bold),
         ),
         actions: [
+          // ✅ Language Change Button
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.language, color: Colors.white),
+            onSelected: (value) {
+              if (value == 'en') {
+                localeProvider.setLocale(const Locale('en'));
+              } else if (value == 'hi') {
+                localeProvider.setLocale(const Locale('hi'));
+              } else if (value == 'bn') {
+                localeProvider.setLocale(const Locale('bn'));
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(value: 'en', child: Text("English")),
+              const PopupMenuItem(value: 'hi', child: Text("हिन्दी")),
+              const PopupMenuItem(value: 'bn', child: Text("বাংলা")),
+            ],
+          ),
           IconButton(
             icon: const Icon(Icons.notifications, color: Colors.white),
             onPressed: showAlertNotification,
@@ -122,13 +173,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Color.fromARGB(182, 110, 197, 255), Color.fromARGB(127, 2, 96, 172), Color.fromARGB(223, 147, 202, 232)],
+          colors: [
+            Color.fromARGB(182, 110, 197, 255),
+            Color.fromARGB(127, 2, 96, 172),
+            Color.fromARGB(223, 147, 202, 232)
+          ],
         ),
       ),
       child: SingleChildScrollView(
-        padding: const EdgeInsets.only(top: 100, left: 16, right: 16, bottom: 20),
+        padding:
+            const EdgeInsets.only(top: 100, left: 16, right: 16, bottom: 20),
         child: Column(
           children: [
+            if (isLoading)
+              // ✅ Show Lottie loader while fetching API
+              Center(
+                child: Lottie.asset(
+                  'assets/animations/loading.json',
+                  width: 100,
+                  height: 100,
+                ),
+              ),
             if (showRiskBanner) _buildRiskBanner(), // 👈 Top Risk Notification
             const SizedBox(height: 16),
             _buildProfileCard(),
@@ -146,50 +211,54 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-// ✅ Risk Notification Banner (Top of Dashboard)
-Widget _buildRiskBanner() {
-  return GestureDetector(
-    onTap: () {
-      Navigator.pushNamed(context, "/alert"); // 👈 Goes to AlertScreen
-    },
-    child: Dismissible(
-      key: const ValueKey("riskBanner"),
-      direction: DismissDirection.endToStart,
-      onDismissed: (_) {
-        setState(() {
-          showRiskBanner = false;
-        });
+  // ✅ Risk Notification Banner (Top of Dashboard)
+  Widget _buildRiskBanner() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, "/alert"); // 👈 Goes to AlertScreen
       },
-      background: Container(color: Colors.transparent),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(221, 238, 82, 70).withOpacity(0.9),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            const Icon(Icons.warning, color: Colors.white),
-            const SizedBox(width: 12),
-            const Expanded(
-              child: Text(
-                "⚠️ Unsafe Water Quality Detected! Tap for details.",
-                style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold),
+      child: Dismissible(
+        key: const ValueKey("riskBanner"),
+        direction: DismissDirection.endToStart,
+        onDismissed: (_) {
+          setState(() {
+            showRiskBanner = false;
+          });
+        },
+        background: Container(color: Colors.transparent),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(221, 238, 82, 70).withOpacity(0.9),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              // ✅ Replaced Icon with Lottie
+              Lottie.asset(
+                'assets/animations/alert.json',
+                width: 40,
+                height: 40,
+                repeat: true,
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.close, color: Colors.white),
-              onPressed: () =>
-                  setState(() => showRiskBanner = false),
-            ),
-          ],
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Text(
+                  "⚠️ Unsafe Water Quality Detected! Tap for details.",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.close, color: Colors.white),
+                onPressed: () => setState(() => showRiskBanner = false),
+              ),
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   // ✅ Profile Card (Clickable)
   Widget _buildProfileCard() {

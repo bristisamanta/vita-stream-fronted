@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import 'theme_state.dart';
-import 'package:vitastream/utils/permission_handler.dart';
+// 🌍 Localization
+import 'l10n/app_localizations.dart';
 
 // Screens
 import 'screens/splash_screen.dart';
@@ -16,39 +16,16 @@ import 'screens/tips_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/alert_screen.dart';
 
-// ✅ Global notification plugin
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-
-// ✅ Navigator key (needed for redirect from notifications)
+// Providers (make sure you created ThemeProvider & LocaleProvider)
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // ✅ Request BLE permissions before app runs
-  await AppPermissions.requestBluetoothPermissions();
-
-  // ✅ Initialize notifications
-  const AndroidInitializationSettings androidInit =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-
-  const InitializationSettings initSettings =
-      InitializationSettings(android: androidInit);
-
-  await flutterLocalNotificationsPlugin.initialize(
-    initSettings,
-    onDidReceiveNotificationResponse: (NotificationResponse response) {
-      if (response.payload == "alert") {
-        // ✅ Navigate to AlertScreen when tapped
-        navigatorKey.currentState?.pushNamed("/alert");
-      }
-    },
-  );
-
+void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => LocaleProvider()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -60,9 +37,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final localeProvider = Provider.of<LocaleProvider>(context);
 
     return MaterialApp(
-      navigatorKey: navigatorKey, // ✅ added for notification navigation
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       themeMode: themeProvider.currentTheme,
       theme: ThemeData(
@@ -74,22 +52,31 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.teal,
       ),
 
-      // ✅ Start with SplashScreen
+      // 🌍 Localization setup
+      locale: localeProvider.locale ?? const Locale('hi'), // Default Hindi
+      supportedLocales: const [
+        Locale('en'),
+        Locale('hi'),
+        Locale('bn'),
+      ],
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+
+      // Routes
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),
         '/onboarding': (context) => const OnboardingLoginScreen(),
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignupScreen(),
-
-        // ✅ Your real dashboard with bottom navigation
         '/dashboard': (context) => const DashboardScreen(),
-
         '/settings': (context) => const SettingsScreen(),
         '/tips': (context) => const TipsScreen(),
         '/profile': (context) => const ProfileScreen(),
-
-        // ✅ Alerts screen
         '/alert': (context) => const AlertScreen(),
       },
     );
