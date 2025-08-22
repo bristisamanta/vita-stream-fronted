@@ -108,7 +108,9 @@ class _PairingScreenState extends State<PairingScreen>
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.black.withOpacity(0.8)
+          : Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
@@ -119,10 +121,14 @@ class _PairingScreenState extends State<PairingScreen>
             mainAxisSize: MainAxisSize.min,
             children: [
               Text("Pairing Wizard: ${device["name"]}",
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold)),
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).textTheme.bodyLarge?.color)),
               const SizedBox(height: 20),
-              const Text("Step 1: Enter WiFi credentials"),
+              Text("Step 1: Enter WiFi credentials",
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyMedium?.color)),
               const TextField(
                 decoration: InputDecoration(labelText: "WiFi SSID"),
               ),
@@ -158,7 +164,7 @@ class _PairingScreenState extends State<PairingScreen>
       margin: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFFB7D9EB), Color(0xFF7FB3D5)],
+          colors: [Color(0xFF4A90E2), Color(0xFF007AFF)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -184,7 +190,7 @@ class _PairingScreenState extends State<PairingScreen>
     );
   }
 
-  Widget buildDeviceCard(Map<String, dynamic> device) {
+  Widget buildDeviceCard(Map<String, dynamic> device, bool isDark) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: ClipRRect(
@@ -197,19 +203,24 @@ class _PairingScreenState extends State<PairingScreen>
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               gradient: LinearGradient(
-                colors: [
-                  Colors.white.withOpacity(device["connected"] ? 0.12 : 0.25),
-                  Colors.white.withOpacity(device["connected"] ? 0.05 : 0.15),
-                ],
+                colors: isDark
+                    ? [
+                        Colors.black.withOpacity(0.5),
+                        Colors.black.withOpacity(0.3),
+                      ]
+                    : [
+                        Colors.white.withOpacity(device["connected"] ? 0.12 : 0.25),
+                        Colors.white.withOpacity(device["connected"] ? 0.05 : 0.15),
+                      ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              border: Border.all(color: Colors.white.withOpacity(0.25)),
+              border: Border.all(color: Colors.white.withOpacity(0.2)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 5),
+                  color: Colors.black.withOpacity(0.25),
+                  blurRadius: 12,
+                  offset: const Offset(0, 6),
                 ),
               ],
             ),
@@ -223,15 +234,18 @@ class _PairingScreenState extends State<PairingScreen>
                     Expanded(
                       child: Text(
                         device["name"],
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: isDark ? Colors.white : Colors.black,
+                        ),
                       ),
                     ),
-                    // 🔹 Gradient Pair Button
+                    // 🔹 Pair Button
                     Container(
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [Color(0xFF7FB3D5), Color(0xFFB7D9EB)],
+                          colors: [Color(0xFF007AFF), Color(0xFF4A90E2)],
                         ),
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -257,9 +271,15 @@ class _PairingScreenState extends State<PairingScreen>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Battery: ${device["battery"]}%"),
-                      Text("Status: ${device["sensorStatus"]}"),
-                      Text("Connected: ${device["connected"] ? "Yes ✅" : "No ❌"}"),
+                      Text("Battery: ${device["battery"]}%",
+                          style: TextStyle(
+                              color: isDark ? Colors.white70 : Colors.black)),
+                      Text("Status: ${device["sensorStatus"]}",
+                          style: TextStyle(
+                              color: isDark ? Colors.white70 : Colors.black)),
+                      Text("Connected: ${device["connected"] ? "Yes ✅" : "No ❌"}",
+                          style: TextStyle(
+                              color: isDark ? Colors.white70 : Colors.black)),
                     ],
                   ),
                 ),
@@ -293,14 +313,14 @@ class _PairingScreenState extends State<PairingScreen>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Color(0xFFB7D9EB),
-            Color(0xFFDEEFFF),
-            Color(0xFFAACCE0),
-          ],
+          colors: isDark
+              ? [const Color(0xFF0F2027), const Color(0xFF203A43), const Color(0xFF2C5364)]
+              : [const Color(0xFFB7D9EB), const Color(0xFFDEEFFF), const Color(0xFFAACCE0)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -342,15 +362,9 @@ class _PairingScreenState extends State<PairingScreen>
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 status,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                        offset: Offset(1, 1),
-                        blurRadius: 3,
-                        color: Colors.black26)
-                  ],
+                  color: isDark ? Colors.white : Colors.black,
                 ),
               ),
             ),
@@ -365,7 +379,7 @@ class _PairingScreenState extends State<PairingScreen>
                 : ListView.builder(
                     itemCount: devices.length,
                     itemBuilder: (context, index) =>
-                        buildDeviceCard(devices[index]),
+                        buildDeviceCard(devices[index], isDark),
                   ),
           ),
 
@@ -380,20 +394,18 @@ class _PairingScreenState extends State<PairingScreen>
                 height: 55,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFFB7D9EB),
-                      Color(0xFFAACCE0),
-                      Color(0xFF7FB3D5),
-                    ],
+                  gradient: LinearGradient(
+                    colors: isDark
+                        ? [Colors.blueGrey.shade900, Colors.blueGrey.shade700]
+                        : [const Color(0xFFB7D9EB), const Color(0xFFAACCE0), const Color(0xFF7FB3D5)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   border: Border.all(
-                      color: Colors.white.withOpacity(0.7), width: 2),
+                      color: Colors.white.withOpacity(0.3), width: 1),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.blueAccent.withOpacity(0.4),
+                      color: Colors.black.withOpacity(0.4),
                       blurRadius: 18,
                       spreadRadius: 3,
                     ),
@@ -417,4 +429,3 @@ class _PairingScreenState extends State<PairingScreen>
     );
   }
 }
-
