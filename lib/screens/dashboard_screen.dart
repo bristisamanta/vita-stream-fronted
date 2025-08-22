@@ -139,7 +139,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       color: Colors.white,
     ),
     onPressed: () {
-      themeProvider.toggleTheme();
+      themeProvider.toggleTheme(themeProvider.themeMode != ThemeMode.dark,);
     },
   ),
           IconButton(
