@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -12,7 +13,6 @@ class WavePainter extends CustomPainter {
     if (!isScanning) return;
 
     final Paint paint = Paint()
-      ..color = Colors.teal.withOpacity(0.2)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 4;
 
@@ -21,7 +21,7 @@ class WavePainter extends CustomPainter {
 
     for (int i = 0; i < 3; i++) {
       final radius = maxRadius * (progress + i * 0.3).clamp(0.0, 1.0);
-      paint.color = Colors.teal.withOpacity(0.2 - i * 0.05);
+      paint.color = const Color(0xFFB7D9EB).withOpacity(0.25 - i * 0.07);
       canvas.drawCircle(center, radius, paint);
     }
   }
@@ -100,12 +100,10 @@ class _PairingScreenState extends State<PairingScreen>
         status = "Connected to ${device["name"]} ✅";
       });
 
-      // Show pairing wizard
       showPairingWizard(device);
     });
   }
 
-  // 🔹 Device Pairing Wizard
   void showPairingWizard(Map<String, dynamic> device) {
     showModalBottomSheet(
       context: context,
@@ -134,6 +132,11 @@ class _PairingScreenState extends State<PairingScreen>
               ),
               const SizedBox(height: 20),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                   setState(() {
@@ -149,178 +152,269 @@ class _PairingScreenState extends State<PairingScreen>
     );
   }
 
-  // 🔹 Device Card with extra features
-  Widget buildDeviceCard(Map<String, dynamic> device) {
+  // 🔹 Custom Gradient Button
+  Widget gradientButton(String text, VoidCallback onTap) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: LinearGradient(
-          colors: [Colors.white.withOpacity(0.3), Colors.white.withOpacity(0.1)],
+        gradient: const LinearGradient(
+          colors: [Color(0xFFB7D9EB), Color(0xFF7FB3D5)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
+        borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
-            color: Colors.teal.withOpacity(0.2),
+            color: Colors.blueAccent.withOpacity(0.3),
             blurRadius: 8,
-            offset: const Offset(2, 4),
+            offset: const Offset(0, 3),
           ),
         ],
-        border: Border.all(color: Colors.white.withOpacity(0.4)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.wifi, color: Colors.teal, size: 30),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  device["name"],
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),
-                ),
+      child: TextButton(
+        onPressed: onTap,
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        ),
+        child: Text(text, style: const TextStyle(fontWeight: FontWeight.bold)),
+      ),
+    );
+  }
+
+  Widget buildDeviceCard(Map<String, dynamic> device) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 500),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                colors: [
+                  Colors.white.withOpacity(device["connected"] ? 0.12 : 0.25),
+                  Colors.white.withOpacity(device["connected"] ? 0.05 : 0.15),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)),
+              border: Border.all(color: Colors.white.withOpacity(0.25)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
                 ),
-                onPressed: () => connectToDevice(device),
-                child: const Text("Pair"),
-              )
-            ],
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.wifi, color: Colors.blueAccent, size: 30),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        device["name"],
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                    ),
+                    // 🔹 Gradient Pair Button
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF7FB3D5), Color(0xFFB7D9EB)],
+                        ),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        onPressed: () => connectToDevice(device),
+                        child: const Text("Pair",
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                AnimatedOpacity(
+                  duration: const Duration(milliseconds: 500),
+                  opacity: device["connected"] ? 0.7 : 1.0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Battery: ${device["battery"]}%"),
+                      Text("Status: ${device["sensorStatus"]}"),
+                      Text("Connected: ${device["connected"] ? "Yes ✅" : "No ❌"}"),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    gradientButton("Calibrate", () {
+                      setState(() {
+                        status = "Calibrating ${device["name"]}...";
+                      });
+                    }),
+                    gradientButton("OTA Update", () {
+                      setState(() {
+                        status = "Updating firmware of ${device["name"]}...";
+                      });
+                    }),
+                    gradientButton("Settings", () {
+                      setState(() {
+                        status = "Opening settings for ${device["name"]}";
+                      });
+                    }),
+                  ],
+                )
+              ],
+            ),
           ),
-          const SizedBox(height: 8),
-          Text("Battery: ${device["battery"]}%"),
-          Text("Status: ${device["sensorStatus"]}"),
-          Text("Connected: ${device["connected"] ? "Yes ✅" : "No ❌"}"),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              TextButton(
-                onPressed: () => setState(() {
-                  status = "Calibrating ${device["name"]}...";
-                }),
-                child: const Text("Calibrate"),
-              ),
-              TextButton(
-                onPressed: () => setState(() {
-                  status = "Updating firmware of ${device["name"]}...";
-                }),
-                child: const Text("OTA Update"),
-              ),
-              TextButton(
-                onPressed: () => setState(() {
-                  status = "Opening settings for ${device["name"]}";
-                }),
-                child: const Text("Settings"),
-              ),
-            ],
-          )
-        ],
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 20),
-
-        SizedBox(
-          height: 180,
-          width: 180,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              AnimatedBuilder(
-                animation: _waveController,
-                builder: (_, __) {
-                  return CustomPaint(
-                    painter: WavePainter(
-                      progress: _waveController.value,
-                      isScanning: isScanning,
-                    ),
-                    size: const Size(180, 180),
-                  );
-                },
-              ),
-              Lottie.asset(
-                "assets/lottie/scanning.json",
-                height: 120,
-                repeat: true,
-              ),
-            ],
-          ),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Color(0xFFB7D9EB),
+            Color(0xFFDEEFFF),
+            Color(0xFFAACCE0),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 20),
 
-        if (status.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              status,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+          // 🔹 Scanner
+          SizedBox(
+            height: 180,
+            width: 180,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                AnimatedBuilder(
+                  animation: _waveController,
+                  builder: (_, __) {
+                    return CustomPaint(
+                      painter: WavePainter(
+                        progress: _waveController.value,
+                        isScanning: isScanning,
+                      ),
+                      size: const Size(180, 180),
+                    );
+                  },
+                ),
+                Lottie.asset(
+                  "assets/lottie/scanning.json",
+                  height: 120,
+                  repeat: true,
+                ),
+              ],
             ),
           ),
 
-        Expanded(
-          child: devices.isEmpty && !isScanning
-              ? Center(
-                  child:
-                      Lottie.asset("assets/lottie/no-devices.json", height: 150),
-                )
-              : ListView.builder(
-                  itemCount: devices.length,
-                  itemBuilder: (context, index) =>
-                      buildDeviceCard(devices[index]),
+          if (status.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                status,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  shadows: [
+                    Shadow(
+                        offset: Offset(1, 1),
+                        blurRadius: 3,
+                        color: Colors.black26)
+                  ],
                 ),
-        ),
-
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: GestureDetector(
-            onTap: startScan,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 500),
-              width: double.infinity,
-              height: 55,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                gradient: const LinearGradient(
-                  colors: [Colors.teal, Colors.green],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                boxShadow: isScanning
-                    ? [
-                        BoxShadow(
-                          color: Colors.teal.withOpacity(0.6),
-                          blurRadius: 20,
-                          spreadRadius: 5,
-                        ),
-                      ]
-                    : [],
               ),
-              child: Center(
-                child: Text(
-                  isScanning ? "Scanning..." : "Scan Devices",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
+            ),
+
+          // 🔹 Devices List
+          Expanded(
+            child: devices.isEmpty && !isScanning
+                ? Center(
+                    child: Lottie.asset("assets/lottie/no-devices.json",
+                        height: 150),
+                  )
+                : ListView.builder(
+                    itemCount: devices.length,
+                    itemBuilder: (context, index) =>
+                        buildDeviceCard(devices[index]),
+                  ),
+          ),
+
+          // 🔹 Scan Button
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: GestureDetector(
+              onTap: startScan,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
+                width: double.infinity,
+                height: 55,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color(0xFFB7D9EB),
+                      Color(0xFFAACCE0),
+                      Color(0xFF7FB3D5),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  border: Border.all(
+                      color: Colors.white.withOpacity(0.7), width: 2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.blueAccent.withOpacity(0.4),
+                      blurRadius: 18,
+                      spreadRadius: 3,
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Text(
+                    isScanning ? "Scanning..." : "Scan Devices",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
+
