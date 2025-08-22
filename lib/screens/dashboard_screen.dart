@@ -98,7 +98,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     final List<String> titles = [
   AppLocalizations.of(context)!.pairDevice,
-  AppLocalizations.of(context)!.vitaStream,   // ✅ instead of "VitaStream"
+  "VitaStream",
   AppLocalizations.of(context)!.safeWaterSources,
   AppLocalizations.of(context)!.tips,
 ];
