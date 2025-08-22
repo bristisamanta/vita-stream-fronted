@@ -64,46 +64,49 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    final localeProvider = Provider.of<LocaleProvider>(context);
 
-    return MaterialApp(
-      navigatorKey: navigatorKey,
-      debugShowCheckedModeBanner: false,
-      title: "VitaStream",
+    return Consumer<LocaleProvider>(
+      builder: (context, localeProvider, child) {
+        return MaterialApp(
+          navigatorKey: navigatorKey,
+          debugShowCheckedModeBanner: false,
+          title: "VitaStream",
 
-      // ✅ Theme
-      themeMode: themeProvider.themeMode,
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primarySwatch: Colors.teal,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.teal,
-      ),
+          // ✅ Theme
+          themeMode: themeProvider.themeMode,
+          theme: ThemeData(
+            brightness: Brightness.light,
+            primarySwatch: Colors.teal,
+          ),
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            primarySwatch: Colors.teal,
+          ),
 
-      // 🌍 Localization setup
-      locale: localeProvider.locale ?? const Locale('en'), // Default = English
-      supportedLocales: AppLocalizations.supportedLocales,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
+          // 🌍 Localization setup
+          locale: localeProvider.locale ?? const Locale('en'),
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
 
-      // ✅ Routes
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const SplashScreen(),
-        '/onboarding': (context) => const OnboardingLoginScreen(),
-        '/login': (context) => const LoginScreen(),
-        '/signup': (context) => const SignupScreen(),
-        '/dashboard': (context) => const DashboardScreen(),
-        '/settings': (context) => const SettingsScreen(),
-        '/tips': (context) => const TipsScreen(),
-        '/profile': (context) => const ProfileScreen(),
-        '/alert': (context) => const AlertScreen(),
+          // ✅ Routes
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const SplashScreen(),
+            '/onboarding': (context) => const OnboardingLoginScreen(),
+            '/login': (context) => const LoginScreen(),
+            '/signup': (context) => const SignupScreen(),
+            '/dashboard': (context) => const DashboardScreen(),
+            '/settings': (context) => const SettingsScreen(),
+            '/tips': (context) => const TipsScreen(),
+            '/profile': (context) => const ProfileScreen(),
+            '/alert': (context) => const AlertScreen(),
+          },
+        );
       },
     );
   }

@@ -123,6 +123,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tips'**
   String get tips;
+
+  /// No description provided for @phValue.
+  ///
+  /// In en, this message translates to:
+  /// **'pH Value'**
+  String get phValue;
+
+  /// No description provided for @battery.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery'**
+  String get battery;
+
+  /// No description provided for @lastSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Sync'**
+  String get lastSync;
+
+  /// No description provided for @safeWaterTips.
+  ///
+  /// In en, this message translates to:
+  /// **'Safe Water Tips'**
+  String get safeWaterTips;
+
+  /// No description provided for @unsafeWaterActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsafe Water Actions'**
+  String get unsafeWaterActions;
+
+  /// No description provided for @boilWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Boil water before drinking'**
+  String get boilWater;
+
+  /// No description provided for @useFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Use proper water filters'**
+  String get useFilters;
+
+  /// No description provided for @storeContainers.
+  ///
+  /// In en, this message translates to:
+  /// **'Store in clean containers'**
+  String get storeContainers;
+
+  /// No description provided for @avoidDrinking.
+  ///
+  /// In en, this message translates to:
+  /// **'Avoid drinking until tested'**
+  String get avoidDrinking;
+
+  /// No description provided for @reportAuthority.
+  ///
+  /// In en, this message translates to:
+  /// **'Report to local authority'**
+  String get reportAuthority;
 }
 
 class _AppLocalizationsDelegate

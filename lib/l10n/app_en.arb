@@ -2,5 +2,16 @@
   "pairDevice": "Pair Device",
   "vitaStream": "VitaStream",
   "safeWaterSources": "Safe Water Sources",
-  "tips": "Tips"
+  "tips": "Tips",
+  "phValue": "pH Value",
+  "battery": "Battery",
+  "lastSync": "Last Sync",
+  "safeWaterTips": "Safe Water Tips",
+  "unsafeWaterActions": "Unsafe Water Actions",
+  "boilWater": "Boil water before drinking",
+  "useFilters": "Use proper water filters",
+  "storeContainers": "Store in clean containers",
+  "avoidDrinking": "Avoid drinking until tested",
+  "reportAuthority": "Report to local authority"
+  
 }

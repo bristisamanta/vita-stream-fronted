@@ -98,7 +98,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     final List<String> titles = [
   AppLocalizations.of(context)!.pairDevice,
-  "VitaStream",
+  AppLocalizations.of(context)!.vitaStream,   // ✅ instead of "VitaStream"
   AppLocalizations.of(context)!.safeWaterSources,
   AppLocalizations.of(context)!.tips,
 ];
@@ -190,7 +190,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           colors: [
             Color.fromARGB(182, 110, 197, 255),
             Color.fromARGB(127, 2, 96, 172),
-            Color.fromARGB(223, 147, 202, 232)
+            Color.fromARGB(223, 74, 145, 184)
           ],
         ),
       ),

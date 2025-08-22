@@ -19,4 +19,34 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get tips => 'सुझाव';
+
+  @override
+  String get phValue => 'पीएच मान';
+
+  @override
+  String get battery => 'बैटरी';
+
+  @override
+  String get lastSync => 'अंतिम सिंक';
+
+  @override
+  String get safeWaterTips => 'सुरक्षित जल सुझाव';
+
+  @override
+  String get unsafeWaterActions => 'असुरक्षित जल क्रियाएँ';
+
+  @override
+  String get boilWater => 'पानी पीने से पहले उबालें';
+
+  @override
+  String get useFilters => 'उचित जल फिल्टर का उपयोग करें';
+
+  @override
+  String get storeContainers => 'साफ कंटेनरों में संग्रह करें';
+
+  @override
+  String get avoidDrinking => 'जाँच होने तक न पिएं';
+
+  @override
+  String get reportAuthority => 'स्थानीय प्राधिकरण को रिपोर्ट करें';
 }

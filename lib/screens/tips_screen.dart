@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,7 +28,7 @@ class _TipsScreenState extends State<TipsScreen>
     _fetchRandomFact();
     _pulseController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 3),
     )..repeat(reverse: true);
   }
 
@@ -47,7 +48,7 @@ class _TipsScreenState extends State<TipsScreen>
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         setState(() {
-          factOfTheDay = "💡 Fact of the Day: ${data["text"]}";
+          factOfTheDay = "💡 ${data["text"]}";
         });
       } else {
         setState(() {
@@ -74,32 +75,47 @@ class _TipsScreenState extends State<TipsScreen>
     _fetchRandomFact();
   }
 
-  Widget _buildInfoCard(String label, String value, IconData icon, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4,
-            offset: const Offset(0, 3),
+  Widget _glassCard({required Widget child}) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            gradient: LinearGradient(
+              colors: [
+                Colors.white.withOpacity(0.2),
+                Colors.white.withOpacity(0.05),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            border: Border.all(color: Colors.white.withOpacity(0.2)),
           ),
-        ],
+          child: child,
+        ),
       ),
+    );
+  }
+
+  Widget _buildInfoCard(String label, String value, IconData icon, Color color) {
+    return _glassCard(
       child: Row(
         children: [
-          Icon(icon, color: color),
-          const SizedBox(width: 10),
+          Icon(icon, color: color, size: 28),
+          const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(label,
-                  style: const TextStyle(fontSize: 12, color: Colors.black54)),
+                  style: const TextStyle(fontSize: 12, color: Colors.white70)),
               Text(value,
                   style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold)),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white)),
             ],
           ),
         ],
@@ -108,20 +124,17 @@ class _TipsScreenState extends State<TipsScreen>
   }
 
   Widget _buildTipItem(String text, String assetPath, Color bgColor) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: bgColor.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(14),
-      ),
+    return _glassCard(
       child: Row(
         children: [
-          SvgPicture.asset(assetPath, height: 28, width: 28, color: bgColor),
-          const SizedBox(width: 10),
+          SvgPicture.asset(assetPath, height: 30, width: 30, color: bgColor),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(text,
-                style:
-                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white)),
           ),
         ],
       ),
@@ -130,116 +143,139 @@ class _TipsScreenState extends State<TipsScreen>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _simulatePHChange,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            // Pulsing Badge
-            ScaleTransition(
-              scale: Tween(begin: 1.0, end: 1.1).animate(
-                CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
-              ),
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: isSafe ? Colors.green.shade300 : Colors.red.shade300,
-                ),
-                child: Column(
-                  children: [
-                    Lottie.asset(
-                      "assets/lottie/fact.json",
-                      width: 100,
-                      height: 100,
-                      repeat: true,
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final backgroundGradient = isDark
+        ? LinearGradient(
+            colors: [Colors.blueGrey.shade900, Colors.black],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          )
+        : (isSafe
+            ? LinearGradient(
+                colors: [Colors.teal.shade700, Colors.green.shade400],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              )
+            : LinearGradient(
+                colors: [Colors.red.shade700, Colors.orange.shade400],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ));
+
+    return Scaffold(
+      body: AnimatedContainer(
+        duration: const Duration(seconds: 1),
+        curve: Curves.easeInOut,
+        decoration: BoxDecoration(
+          gradient: backgroundGradient,
+        ),
+        child: SafeArea(
+          child: GestureDetector(
+            onTap: _simulatePHChange,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(18),
+              child: Column(
+                children: [
+                  // Pulsing Badge
+                  ScaleTransition(
+                    scale: Tween(begin: 1.0, end: 1.15).animate(
+                      CurvedAnimation(
+                          parent: _pulseController, curve: Curves.easeInOut),
                     ),
-                    Text(
-                      isSafe ? "Safe Water" : "Unsafe Water",
+                    child: _glassCard(
+                      child: Column(
+                        children: [
+                          Lottie.asset(
+                            "assets/lottie/fact.json",
+                            width: 120,
+                            height: 120,
+                            repeat: true,
+                          ),
+                          Text(
+                            isSafe ? "✅ Safe Water" : "⚠️ Unsafe Water",
+                            style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Info Cards
+                  Row(
+                    children: [
+                      Expanded(
+                          child: _buildInfoCard("pH Value", "$pH", Icons.science,
+                              Colors.tealAccent)),
+                      const SizedBox(width: 12),
+                      Expanded(
+                          child: _buildInfoCard("Battery", "$battery%",
+                              Icons.battery_charging_full, Colors.orangeAccent)),
+                      const SizedBox(width: 12),
+                      Expanded(
+                          child: _buildInfoCard(
+                              "Last Sync", lastSync, Icons.sync, Colors.blueAccent)),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("💧 Safe Water Tips",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.tealAccent.shade100)),
+                  ),
+                  const SizedBox(height: 12),
+                  _buildTipItem("Boil water before drinking",
+                      "assets/lottie/boil.json", Colors.greenAccent),
+                  const SizedBox(height: 10),
+                  _buildTipItem("Use proper water filters",
+                      "assets/lottie/filter.json", Colors.tealAccent),
+                  const SizedBox(height: 10),
+                  _buildTipItem("Store in clean containers",
+                      "assets/lottie/container.json", Colors.blueAccent),
+
+                  const SizedBox(height: 20),
+
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("⚠️ Unsafe Water Actions",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.redAccent.shade100)),
+                  ),
+                  const SizedBox(height: 12),
+                  _buildTipItem("Avoid drinking until tested",
+                      "assets/icons/warning.svg",
+                      const Color.fromARGB(255, 246, 81, 81)),
+                  const SizedBox(height: 10),
+                  _buildTipItem("Report to local authority",
+                      "assets/icons/report.svg",
+                      const Color.fromARGB(255, 240, 205, 160)),
+
+                  const SizedBox(height: 20),
+
+                  // Fact of the Day
+                  _glassCard(
+                    child: Text(
+                      factOfTheDay,
                       style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
                           color: Colors.white),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 20),
-
-            // Info Cards
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                    child: _buildInfoCard(
-                        "pH Value", "$pH", Icons.science, Colors.teal)),
-                const SizedBox(width: 10),
-                Expanded(
-                    child: _buildInfoCard("Battery", "$battery%",
-                        Icons.battery_std, Colors.orange)),
-                const SizedBox(width: 10),
-                Expanded(
-                    child: _buildInfoCard(
-                        "Last Sync", lastSync, Icons.sync, Colors.blue)),
-              ],
-            ),
-            const SizedBox(height: 20),
-
-            // Safe Water Tips
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text("✅ Safe Water Tips",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: const Color.fromARGB(255, 225, 233, 225))),
-            ),
-            const SizedBox(height: 8),
-            _buildTipItem("Boil water before drinking", "assets/lottie/boil.json",
-                Colors.green),
-            const SizedBox(height: 8),
-            _buildTipItem("Use proper water filters", "assets/lottie/filter.json",
-                Colors.teal),
-            const SizedBox(height: 8),
-            _buildTipItem("Store in clean, closed containers",
-                "assets/lottie/container.json", Colors.blue),
-
-            const SizedBox(height: 20),
-
-            // Unsafe Water Steps
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text("⚠️ Unsafe Water Actions",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.red.shade700)),
-            ),
-            const SizedBox(height: 8),
-            _buildTipItem("Avoid drinking until tested", "assets/icons/warning.svg",
-                 Colors.red),
-            const SizedBox(height: 8),
-            _buildTipItem("Report to local authority", "assets/icons/report.svg", 
-                Colors.orange),
-
-            const SizedBox(height: 20),
-
-            // Fact of the Day
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.yellow.shade100,
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: Text(
-                factOfTheDay,
-                style: const TextStyle(
-                    fontSize: 14, fontWeight: FontWeight.w500),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

@@ -19,4 +19,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tips => 'Tips';
+
+  @override
+  String get phValue => 'pH Value';
+
+  @override
+  String get battery => 'Battery';
+
+  @override
+  String get lastSync => 'Last Sync';
+
+  @override
+  String get safeWaterTips => 'Safe Water Tips';
+
+  @override
+  String get unsafeWaterActions => 'Unsafe Water Actions';
+
+  @override
+  String get boilWater => 'Boil water before drinking';
+
+  @override
+  String get useFilters => 'Use proper water filters';
+
+  @override
+  String get storeContainers => 'Store in clean containers';
+
+  @override
+  String get avoidDrinking => 'Avoid drinking until tested';
+
+  @override
+  String get reportAuthority => 'Report to local authority';
 }

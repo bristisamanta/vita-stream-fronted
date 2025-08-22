@@ -2,5 +2,17 @@
   "pairDevice": "डिवाइस जोड़ें",
   "vitaStream": "विटास्ट्रीम",
   "safeWaterSources": "सुरक्षित जल स्रोत",
-  "tips": "सुझाव"
+  "tips": "सुझाव",
+  "phValue": "पीएच मान",
+  "battery": "बैटरी",
+  "lastSync": "अंतिम सिंक",
+  "safeWaterTips": "सुरक्षित जल सुझाव",
+  "unsafeWaterActions": "असुरक्षित जल क्रियाएँ",
+  "boilWater": "पानी पीने से पहले उबालें",
+  "useFilters": "उचित जल फिल्टर का उपयोग करें",
+  "storeContainers": "साफ कंटेनरों में संग्रह करें",
+  "avoidDrinking": "जाँच होने तक न पिएं",
+  "reportAuthority": "स्थानीय प्राधिकरण को रिपोर्ट करें"
+
+
 }
