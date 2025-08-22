@@ -1,8 +1,6 @@
 {
-  "@@locale": "hi",
-  "appTitle": "विटास्ट्रीम",
-  "settings": "सेटिंग्स",
-  "notifications": "सूचनाएँ",
-  "language": "भाषा",
-  "logout": "लॉगआउट"
+  "pairDevice": "डिवाइस जोड़ें",
+  "vitaStream": "विटास्ट्रीम",
+  "safeWaterSources": "सुरक्षित जल स्रोत",
+  "tips": "सुझाव"
 }

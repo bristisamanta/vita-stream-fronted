@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lottie/lottie.dart';
+import '../l10n/app_localizations.dart';
+
+
 
 
 // ✅ Providers
@@ -94,11 +97,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ];
 
     final List<String> titles = [
-      "Pair Device",
-      "VitaStream",
-      "Safe Water Sources",
-      "Tips",
-    ];
+  AppLocalizations.of(context)!.pairDevice,
+  "VitaStream",
+  AppLocalizations.of(context)!.safeWaterSources,
+  AppLocalizations.of(context)!.tips,
+];
+
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -129,6 +133,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
               const PopupMenuItem(value: 'bn', child: Text("বাংলা")),
             ],
           ),
+          IconButton(
+    icon: Icon(
+      themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+      color: Colors.white,
+    ),
+    onPressed: () {
+      themeProvider.toggleTheme();
+    },
+  ),
           IconButton(
             icon: const Icon(Icons.notifications, color: Colors.white),
             onPressed: showAlertNotification,

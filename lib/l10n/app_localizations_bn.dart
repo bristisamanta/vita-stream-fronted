@@ -9,17 +9,14 @@ class AppLocalizationsBn extends AppLocalizations {
   AppLocalizationsBn([String locale = 'bn']) : super(locale);
 
   @override
-  String get appTitle => 'ভিটাস্ট্রিম';
+  String get pairDevice => 'ডিভাইস যুক্ত করুন';
 
   @override
-  String get settings => 'সেটিংস';
+  String get vitaStream => 'ভিটাস্ট্রিম';
 
   @override
-  String get notifications => 'নোটিফিকেশন';
+  String get safeWaterSources => 'নিরাপদ পানির উৎস';
 
   @override
-  String get language => 'ভাষা';
-
-  @override
-  String get logout => 'লগআউট';
+  String get tips => 'পরামর্শ';
 }

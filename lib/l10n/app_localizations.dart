@@ -100,35 +100,29 @@ abstract class AppLocalizations {
     Locale('hi'),
   ];
 
-  /// No description provided for @appTitle.
+  /// No description provided for @pairDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Pair Device'**
+  String get pairDevice;
+
+  /// No description provided for @vitaStream.
   ///
   /// In en, this message translates to:
   /// **'VitaStream'**
-  String get appTitle;
+  String get vitaStream;
 
-  /// No description provided for @settings.
+  /// No description provided for @safeWaterSources.
   ///
   /// In en, this message translates to:
-  /// **'Settings'**
-  String get settings;
+  /// **'Safe Water Sources'**
+  String get safeWaterSources;
 
-  /// No description provided for @notifications.
+  /// No description provided for @tips.
   ///
   /// In en, this message translates to:
-  /// **'Notifications'**
-  String get notifications;
-
-  /// No description provided for @language.
-  ///
-  /// In en, this message translates to:
-  /// **'Language'**
-  String get language;
-
-  /// No description provided for @logout.
-  ///
-  /// In en, this message translates to:
-  /// **'Logout'**
-  String get logout;
+  /// **'Tips'**
+  String get tips;
 }
 
 class _AppLocalizationsDelegate

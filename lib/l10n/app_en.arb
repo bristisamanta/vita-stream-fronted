@@ -1,8 +1,6 @@
 {
-  "@@locale": "en",
-  "appTitle": "VitaStream",
-  "settings": "Settings",
-  "notifications": "Notifications",
-  "language": "Language",
-  "logout": "Logout"
+  "pairDevice": "Pair Device",
+  "vitaStream": "VitaStream",
+  "safeWaterSources": "Safe Water Sources",
+  "tips": "Tips"
 }

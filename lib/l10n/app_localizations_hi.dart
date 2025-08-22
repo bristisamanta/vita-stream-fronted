@@ -9,17 +9,14 @@ class AppLocalizationsHi extends AppLocalizations {
   AppLocalizationsHi([String locale = 'hi']) : super(locale);
 
   @override
-  String get appTitle => 'विटास्ट्रीम';
+  String get pairDevice => 'डिवाइस जोड़ें';
 
   @override
-  String get settings => 'सेटिंग्स';
+  String get vitaStream => 'विटास्ट्रीम';
 
   @override
-  String get notifications => 'सूचनाएँ';
+  String get safeWaterSources => 'सुरक्षित जल स्रोत';
 
   @override
-  String get language => 'भाषा';
-
-  @override
-  String get logout => 'लॉगआउट';
+  String get tips => 'सुझाव';
 }

@@ -9,17 +9,14 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'VitaStream';
+  String get pairDevice => 'Pair Device';
 
   @override
-  String get settings => 'Settings';
+  String get vitaStream => 'VitaStream';
 
   @override
-  String get notifications => 'Notifications';
+  String get safeWaterSources => 'Safe Water Sources';
 
   @override
-  String get language => 'Language';
-
-  @override
-  String get logout => 'Logout';
+  String get tips => 'Tips';
 }

@@ -24,7 +24,7 @@ import 'providers/locale_provider.dart';
 // ✅ Global navigator key
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-// ✅ Global notification plugin (imported in dashboard_screen.dart)
+// ✅ Global notification plugin
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -69,6 +69,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
+      title: "VitaStream",
 
       // ✅ Theme
       themeMode: themeProvider.themeMode,
@@ -82,12 +83,8 @@ class MyApp extends StatelessWidget {
       ),
 
       // 🌍 Localization setup
-      locale: localeProvider.locale ?? const Locale('hi'), // Default Hindi
-      supportedLocales: const [
-        Locale('en'),
-        Locale('hi'),
-        Locale('bn'),
-      ],
+      locale: localeProvider.locale ?? const Locale('en'), // Default = English
+      supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -95,7 +92,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
 
-      // Routes
+      // ✅ Routes
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),

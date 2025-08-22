@@ -1,8 +1,6 @@
 {
-  "@@locale": "bn",
-  "appTitle": "ভিটাস্ট্রিম",
-  "settings": "সেটিংস",
-  "notifications": "নোটিফিকেশন",
-  "language": "ভাষা",
-  "logout": "লগআউট"
+  "pairDevice": "ডিভাইস যুক্ত করুন",
+  "vitaStream": "ভিটাস্ট্রিম",
+  "safeWaterSources": "নিরাপদ পানির উৎস",
+  "tips": "পরামর্শ"
 }
