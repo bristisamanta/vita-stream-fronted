@@ -1,16 +1,13 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lottie/lottie.dart';
 import '../l10n/app_localizations.dart';
 
-
-
-
 // ✅ Providers
 import '../providers/theme_provider.dart';
 import '../providers/locale_provider.dart';
-
 
 // ✅ Import the global plugin instance
 import '../main.dart'; // gives access to flutterLocalNotificationsPlugin
@@ -28,11 +25,10 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  int _selectedIndex = 1; // Default = Dashboard
+  int _selectedIndex = 1;
   bool showRiskBanner = true;
   bool isLoading = false;
 
-  // ✅ Simulated API
   Future<void> fetchRiskData() async {
     setState(() => isLoading = true);
     try {
@@ -51,7 +47,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  // ✅ Local Notification
   Future<void> showAlertNotification() async {
     const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
       'alert_channel',
@@ -64,7 +59,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const NotificationDetails platformDetails =
         NotificationDetails(android: androidDetails);
 
-    // ✅ works because we imported from main.dart
     await flutterLocalNotificationsPlugin.show(
       0,
       "Unsafe Water Quality!",
@@ -86,23 +80,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);  // ✅ FIXED
-    final localeProvider = Provider.of<LocaleProvider>(context, listen: true); // (added listen too)
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    final localeProvider = Provider.of<LocaleProvider>(context, listen: true);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final List<Widget> pages = [
       const PairingScreen(),
-      _buildDashboardPage(context),
+      _buildDashboardPage(context, isDark),
       const MapScreen(),
       const TipsScreen(),
     ];
 
     final List<String> titles = [
-  AppLocalizations.of(context)!.pairDevice,
-  "VitaStream",
-  AppLocalizations.of(context)!.safeWaterSources,
-  AppLocalizations.of(context)!.tips,
-];
-
+      AppLocalizations.of(context)!.pairDevice,
+      "VitaStream",
+      AppLocalizations.of(context)!.safeWaterSources,
+      AppLocalizations.of(context)!.tips,
+    ];
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -115,7 +109,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               color: Colors.white, fontWeight: FontWeight.bold),
         ),
         actions: [
-          // ✅ Language Change Button
           PopupMenuButton<String>(
             icon: const Icon(Icons.language, color: Colors.white),
             onSelected: (value) {
@@ -134,14 +127,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
           ),
           IconButton(
-    icon: Icon(
-      themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-      color: Colors.white,
-    ),
-    onPressed: () {
-      themeProvider.toggleTheme(themeProvider.themeMode != ThemeMode.dark,);
-    },
-  ),
+            icon: Icon(
+              themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              themeProvider.toggleTheme(
+                themeProvider.themeMode != ThemeMode.dark,
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.notifications, color: Colors.white),
             onPressed: showAlertNotification,
@@ -162,6 +157,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           topRight: Radius.circular(24),
         ),
         child: BottomNavigationBar(
+          backgroundColor: Colors.black.withOpacity(0.2),
           currentIndex: _selectedIndex,
           onTap: (index) => setState(() => _selectedIndex = index),
           selectedItemColor: Colors.teal,
@@ -179,8 +175,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  // ✅ Dashboard Page
-  Widget _buildDashboardPage(BuildContext context) {
+  Widget _buildDashboardPage(BuildContext context, bool isDark) {
     return Container(
       key: const ValueKey("dashboard"),
       decoration: const BoxDecoration(
@@ -207,156 +202,148 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   height: 100,
                 ),
               ),
-            if (showRiskBanner) _buildRiskBanner(),
-            const SizedBox(height: 16),
-            _buildProfileCard(),
-            const SizedBox(height: 20),
-            _buildReadingsRow(),
-            const SizedBox(height: 20),
-            _buildFarmHealth(),
-            const SizedBox(height: 20),
-            _buildFeatureGrid(context),
-            const SizedBox(height: 20),
-            _buildVideoPlaceholder(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ✅ Risk Notification Banner
-  Widget _buildRiskBanner() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, "/alert");
-      },
-      child: Dismissible(
-        key: const ValueKey("riskBanner"),
-        direction: DismissDirection.endToStart,
-        onDismissed: (_) {
-          setState(() {
-            showRiskBanner = false;
-          });
-        },
-        background: Container(color: Colors.transparent),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(221, 238, 82, 70).withOpacity(0.9),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              Lottie.asset(
-                'assets/lottie/alert.json',
-                width: 40,
-                height: 40,
-                repeat: true,
-              ),
-              const SizedBox(width: 12),
-              const Expanded(
-                child: Text(
-                  "⚠️ Unsafe Water Quality Detected! Tap for details.",
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.close, color: Colors.white),
-                onPressed: () => setState(() => showRiskBanner = false),
-              ),
+            if (showRiskBanner) ...[
+              _glassCard(_buildRiskBanner()),
+              const SizedBox(height: 16),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // ✅ Profile Card
-  Widget _buildProfileCard() {
-    return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, "/profile"),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.8),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          children: const [
-            CircleAvatar(
-              radius: 28,
-              backgroundImage: AssetImage("assets/images/profile.jpg"),
-            ),
-            SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                "Hello Bristi 👋\nTrust yourself and keep going.",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-              ),
-            ),
-            Icon(Icons.arrow_forward_ios, color: Colors.teal, size: 20),
+            _glassCard(_buildProfileCard(isDark)),
+            const SizedBox(height: 20),
+            _glassCard(_buildReadingsRow(isDark)),
+            const SizedBox(height: 20),
+            _glassCard(_buildFarmHealth(isDark)),
+            const SizedBox(height: 20),
+            _glassCard(_buildFeatureGrid(context)),
+            const SizedBox(height: 20),
+            _glassCard(_buildVideoPlaceholder()),
           ],
         ),
       ),
     );
   }
 
-  // ✅ Readings Row
-  Widget _buildReadingsRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+  Widget _glassCard(Widget child) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRiskBanner() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        children: [
+          const Icon(Icons.warning, color: Colors.red, size: 28),
+          const SizedBox(width: 12),
+          const Expanded(
+            child: Text(
+              "⚠️ Unsafe Water Quality Detected!",
+              style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.close, color: Colors.red),
+            onPressed: () {
+              setState(() {
+                showRiskBanner = false;
+              });
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileCard(bool isDark) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        children: [
+          const CircleAvatar(
+            radius: 28,
+            backgroundImage: AssetImage("assets/images/profile.jpg"),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              "Hello Bristi 👋\nTrust yourself and keep going.",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: isDark ? Colors.white : Colors.black,
+              ),
+            ),
+          ),
+          const Icon(Icons.arrow_forward_ios, color: Colors.teal, size: 20),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildReadingsRow(bool isDark) {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _readingCard("pH", "7.1", Colors.green, isDark),
+          _readingCard("TDS", "220 ppm", Colors.orange, isDark),
+          _readingCard("Nitrate", "High", Colors.red, isDark),
+        ],
+      ),
+    );
+  }
+
+  Widget _readingCard(String label, String value, Color color, bool isDark) {
+    return Column(
       children: [
-        _readingCard("pH", "7.1", Colors.green),
-        _readingCard("TDS", "220 ppm", Colors.orange),
-        _readingCard("Nitrate", "High", Colors.red),
+        Text(label,
+            style: TextStyle(color: color, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 4),
+        Text(value,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: isDark ? Colors.white : Colors.black,
+            )),
       ],
     );
   }
 
-  Widget _readingCard(String label, String value, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      width: 100,
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.85),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Text(label,
-              style: TextStyle(color: color, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 4),
-          Text(value,
-              style:
-                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        ],
-      ),
-    );
-  }
-
-  // ✅ Farm Health
-  Widget _buildFarmHealth() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.85),
-        borderRadius: BorderRadius.circular(16),
-      ),
+  Widget _buildFarmHealth(bool isDark) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text("Farm Health Score", style: TextStyle(fontWeight: FontWeight.bold)),
-          SizedBox(height: 8),
-          LinearProgressIndicator(value: 0.75, minHeight: 12),
-          SizedBox(height: 8),
-          Text("75% Healthy - Monitor water quality closely"),
+        children: [
+          Text("Farm Health Score",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.white : Colors.black)),
+          const SizedBox(height: 8),
+          const LinearProgressIndicator(value: 0.75, minHeight: 12),
+          const SizedBox(height: 8),
+          Text("75% Healthy - Monitor water quality closely",
+              style: TextStyle(
+                  color: isDark ? Colors.white70 : Colors.black87)),
         ],
       ),
     );
   }
 
-  // ✅ Feature Grid
   Widget _buildFeatureGrid(BuildContext context) {
     return GridView.count(
       crossAxisCount: 2,
@@ -382,8 +369,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: color.withOpacity(0.85),
           borderRadius: BorderRadius.circular(16),
+          color: color.withOpacity(0.6),
+          border: Border.all(color: Colors.white.withOpacity(0.3)),
         ),
         child: Center(
           child: Column(
@@ -401,14 +389,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  // ✅ Video Placeholder
   Widget _buildVideoPlaceholder() {
     return Container(
       height: 200,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.2),
         borderRadius: BorderRadius.circular(16),
+        color: Colors.black.withOpacity(0.3),
+        border: Border.all(color: Colors.white.withOpacity(0.3)),
       ),
       child: const Text("🎥 Tutorial Video Coming Soon",
           style: TextStyle(color: Colors.white)),
