@@ -17,6 +17,9 @@ import 'pairing_screen.dart';
 import 'map_screen.dart';
 import 'tips_screen.dart';
 import 'water_intake_screen.dart';
+import 'remainder_screen.dart';
+import 'device_status_screen.dart';
+import 'safe_sources_screen.dart'; // ✅ NEW IMPORT
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -321,127 +324,125 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildRiskBanner() {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-    child: Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.red.withOpacity(0.85), Colors.orange.withOpacity(0.8)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.red.withOpacity(0.85), Colors.orange.withOpacity(0.8)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.red.withOpacity(0.4),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            )
+          ],
         ),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.red.withOpacity(0.4),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          )
-        ],
-      ),
-      child: ListTile(
-        leading: const Icon(
-          Icons.warning_amber_rounded,
-          color: Colors.white,
-          size: 36,
-        ),
-        title: const Text(
-          "Unsafe Water Quality Detected!",
-          style: TextStyle(
+        child: ListTile(
+          leading: const Icon(
+            Icons.warning_amber_rounded,
             color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+            size: 36,
+          ),
+          title: const Text(
+            "Unsafe Water Quality Detected!",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          subtitle: const Text(
+            "Immediate action required ⚠️",
+            style: TextStyle(color: Colors.white70, fontSize: 14),
+          ),
+          trailing: IconButton(
+            icon: const Icon(Icons.close, color: Colors.white),
+            onPressed: () {
+              setState(() {
+                showRiskBanner = false;
+              });
+            },
           ),
         ),
-        subtitle: const Text(
-          "Immediate action required ⚠️",
-          style: TextStyle(color: Colors.white70, fontSize: 14),
-        ),
-        trailing: IconButton(
-          icon: const Icon(Icons.close, color: Colors.white),
-          onPressed: () {
-            setState(() {
-              showRiskBanner = false;
-            });
-          },
-        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   Widget _buildProfileCard(bool isDark) {
-  return InkWell(
-    onTap: () => Navigator.pushNamed(context, "/profile"),
-    child: Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: isDark
-              ? [Colors.teal.shade700, Colors.blueGrey.shade800]
-              : [Colors.tealAccent.shade100, Colors.blue.shade200],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, "/profile"),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: isDark
+                ? [Colors.teal.shade700, Colors.blueGrey.shade800]
+                : [Colors.tealAccent.shade100, Colors.blue.shade200],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 12,
+              offset: const Offset(0, 6),
+            ),
+          ],
         ),
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          const CircleAvatar(
-            radius: 30,
-            backgroundImage: AssetImage("assets/images/profile.jpg"),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Hello Bristi 👋",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: isDark ? Colors.white : Colors.black,
+        child: Row(
+          children: [
+            const CircleAvatar(
+              radius: 30,
+              backgroundImage: AssetImage("assets/images/profile.jpg"),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Hello Bristi 👋",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? Colors.white : Colors.black,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  "Trust yourself and keep going.",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: isDark ? Colors.white70 : Colors.black87,
+                  const SizedBox(height: 6),
+                  Text(
+                    "Trust yourself and keep going.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: isDark ? Colors.white70 : Colors.black87,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: isDark ? Colors.white24 : Colors.white,
-              shape: BoxShape.circle,
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isDark ? Colors.white24 : Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: Colors.teal,
+              ),
             ),
-            child: const Icon(
-              Icons.arrow_forward_ios,
-              size: 18,
-              color: Colors.teal,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   Widget _buildReadingsRow(bool isDark) {
     return Padding(
@@ -471,7 +472,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           end: Alignment.bottomRight,
         ),
         boxShadow: [
-          BoxShadow(
+          const BoxShadow(
             color: Colors.black26,
             blurRadius: 6,
             offset: Offset(2, 4),
@@ -504,7 +505,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
-
 
   Widget _buildFarmHealth(bool isDark) {
     return Padding(
@@ -541,9 +541,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
             MaterialPageRoute(builder: (context) => const WaterIntakeScreen()),
           );
         }),
-        _featureCard("Reminders", Icons.alarm, Colors.purple),
-        _featureCard("Device Status", Icons.devices, Colors.orange),
-        _featureCard("Safe Sources", Icons.map, Colors.green),
+        _featureCard("Reminders", Icons.alarm, Colors.purple, onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const RemindersScreen()),
+          );
+        }),
+        _featureCard("Device Status", Icons.devices, Colors.orange, onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const DeviceStatusScreen()),
+          );
+        }),
+        _featureCard("Safe Sources", Icons.map, Colors.green, onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SafeSourcesScreen()),
+          );
+        }),
         _featureCard("Alerts", Icons.warning, Colors.red, onTap: () {
           Navigator.pushNamed(context, "/alert");
         }),

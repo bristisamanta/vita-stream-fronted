@@ -14,7 +14,7 @@ dependencies:
   flutter_reactive_ble: ^5.3.1
   sqflite: ^2.3.3
   permission_handler: ^11.3.0
-  flutter_local_notifications: ^17.1.2   # ✅ keep latest version
+  flutter_local_notifications: 19.4.0   # ✅ keep latest version
   flutter_map: ^6.0.1
   lottie: ^3.0.0
   flutter_svg: ^2.0.9
@@ -37,6 +37,10 @@ dependencies:
   syncfusion_flutter_charts: 30.2.6+1
   fl_chart: ^0.68.0
   fluttertoast: ^8.2.5
+
+  # 🔹 Timezone package required for flutter_local_notifications zonedSchedule
+  timezone: ^0.10.0
+  percent_indicator: ^4.2.5
 
 dev_dependencies:
   flutter_test:
