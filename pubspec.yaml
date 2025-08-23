@@ -33,6 +33,11 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   intl: ^0.20.2
 
+  # 🌱 New dependencies for crop irrigation dashboard
+  syncfusion_flutter_charts: 30.2.6+1
+  fl_chart: ^0.68.0
+  fluttertoast: ^8.2.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
