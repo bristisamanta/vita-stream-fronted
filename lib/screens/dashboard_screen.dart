@@ -5,12 +5,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lottie/lottie.dart';
 import '../l10n/app_localizations.dart';
 
-// ✅ Providers
+// Providers
 import '../providers/theme_provider.dart';
 import '../providers/locale_provider.dart';
 
-// ✅ Import the global plugin instance
-import '../main.dart'; // gives access to flutterLocalNotificationsPlugin
+// Global plugin
+import '../main.dart';
 
 // Screens
 import 'pairing_screen.dart';
@@ -29,6 +29,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  String blockchainStatus = "";
   int _selectedIndex = 1;
   bool showRiskBanner = true;
   bool isLoading = false;
@@ -179,6 +180,81 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  /// ✅ Blockchain Navigation Banner
+  Widget _buildBlockchainBanner(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.blueAccent.withOpacity(0.7),
+            Colors.purpleAccent.withOpacity(0.7)
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Blockchain Services",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildBannerAction(
+                  context, Icons.account_balance_wallet, "Wallet", '/wallet'),
+              _buildBannerAction(context, Icons.send, "Send Tx", '/tx'),
+              _buildBannerAction(
+                  context, Icons.verified_user, "Subsidy", '/subsidy'),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBannerAction(
+      BuildContext context, IconData icon, String label, String route) {
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, route),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withOpacity(0.2),
+            ),
+            child: Icon(icon, color: Colors.white, size: 28),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            label,
+            style: const TextStyle(color: Colors.white, fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// ✅ Main Dashboard Page
   Widget _buildDashboardPage(BuildContext context, bool isDark) {
     return Container(
       key: const ValueKey("dashboard"),
@@ -212,6 +288,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
             _glassCard(_buildProfileCard(isDark)),
             const SizedBox(height: 20),
+
+            /// Blockchain Banner (not glass card)
+            _buildBlockchainBanner(context),
+            const SizedBox(height: 24),
+
             _glassCard(_buildReadingsRow(isDark)),
             const SizedBox(height: 20),
             _glassCard(_buildFarmHealth(isDark)),
@@ -244,55 +325,121 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildRiskBanner() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Row(
-        children: [
-          const Icon(Icons.warning, color: Colors.red, size: 28),
-          const SizedBox(width: 12),
-          const Expanded(
-            child: Text(
-              "⚠️ Unsafe Water Quality Detected!",
-              style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.red.withOpacity(0.85), Colors.orange.withOpacity(0.8)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.red.withOpacity(0.4),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            )
+          ],
+        ),
+        child: ListTile(
+          leading: const Icon(
+            Icons.warning_amber_rounded,
+            color: Colors.white,
+            size: 36,
+          ),
+          title: const Text(
+            "Unsafe Water Quality Detected!",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.close, color: Colors.red),
+          subtitle: const Text(
+            "Immediate action required ⚠",
+            style: TextStyle(color: Colors.white70, fontSize: 14),
+          ),
+          trailing: IconButton(
+            icon: const Icon(Icons.close, color: Colors.white),
             onPressed: () {
               setState(() {
                 showRiskBanner = false;
               });
             },
-          )
-        ],
+          ),
+        ),
       ),
     );
   }
 
   Widget _buildProfileCard(bool isDark) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Row(
-        children: [
-          const CircleAvatar(
-            radius: 28,
-            backgroundImage: AssetImage("assets/images/profile.jpg"),
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, "/profile"),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: isDark
+                ? [Colors.teal.shade700, Colors.blueGrey.shade800]
+                : [Colors.tealAccent.shade100, Colors.blue.shade200],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              "Hello Bristi 👋\nTrust yourself and keep going.",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: isDark ? Colors.white : Colors.black,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 12,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            const CircleAvatar(
+              radius: 30,
+              backgroundImage: AssetImage("assets/images/profile.jpg"),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Hello Bristi 👋",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? Colors.white : Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    "Trust yourself and keep going.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: isDark ? Colors.white70 : Colors.black87,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-          const Icon(Icons.arrow_forward_ios, color: Colors.teal, size: 20),
-        ],
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isDark ? Colors.white24 : Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: Colors.teal,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -303,27 +450,59 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _readingCard("pH", "7.1", Colors.green, isDark),
-          _readingCard("TDS", "220 ppm", Colors.orange, isDark),
-          _readingCard("Nitrate", "High", Colors.red, isDark),
+          _readingCard("pH", "7.1", Icons.science, Colors.green, isDark),
+          _readingCard("TDS", "220 ppm", Icons.water_drop, Colors.orange, isDark),
+          _readingCard("Nitrate", "High", Icons.warning, Colors.red, isDark),
         ],
       ),
     );
   }
 
-  Widget _readingCard(String label, String value, Color color, bool isDark) {
-    return Column(
-      children: [
-        Text(label,
-            style: TextStyle(color: color, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 4),
-        Text(value,
+  Widget _readingCard(String label, String value, IconData icon, Color color, bool isDark) {
+    return Container(
+      width: 100,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        gradient: LinearGradient(
+          colors: isDark
+              ? [Colors.teal.shade900, Colors.teal.shade700]
+              : [Colors.white.withOpacity(0.8), Colors.teal.shade50],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          const BoxShadow(
+            color: Colors.black26,
+            blurRadius: 6,
+            offset: Offset(2, 4),
+          )
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: color, size: 28),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: color,
+              fontSize: 14,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: isDark ? Colors.white : Colors.black,
-            )),
-      ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
