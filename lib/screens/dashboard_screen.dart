@@ -17,6 +17,7 @@ import 'pairing_screen.dart';
 import 'map_screen.dart';
 import 'tips_screen.dart';
 import 'water_intake_screen.dart'; // ✅ NEW IMPORT
+import 'remainder_screen.dart'; // ✅ NEW IMPORT
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -359,7 +360,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
             MaterialPageRoute(builder: (context) => const WaterIntakeScreen()),
           );
         }),
-        _featureCard("Reminders", Icons.alarm, Colors.purple),
+        _featureCard("Reminders", Icons.alarm, Colors.purple, onTap: () {
+          // ✅ Added navigation to RemindersScreen
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const RemindersScreen()),
+          );
+        }),
         _featureCard("Device Status", Icons.devices, Colors.orange),
         _featureCard("Safe Sources", Icons.map, Colors.green),
         _featureCard("Alerts", Icons.warning, Colors.red, onTap: () {
