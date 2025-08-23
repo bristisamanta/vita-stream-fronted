@@ -77,7 +77,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       children: [
         const Text("VitaStream is your water safety and health companion app."),
         const SizedBox(height: 8),
-        const Text("Developed by Bristi 💙"),
+        const Text("Developed by Bristi & Amit 💙"),
       ],
     );
   }
