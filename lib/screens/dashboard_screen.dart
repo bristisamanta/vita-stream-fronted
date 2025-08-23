@@ -16,6 +16,7 @@ import '../main.dart'; // gives access to flutterLocalNotificationsPlugin
 import 'pairing_screen.dart';
 import 'map_screen.dart';
 import 'tips_screen.dart';
+import 'water_intake_screen.dart'; // ✅ NEW IMPORT
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -352,7 +353,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
       crossAxisSpacing: 12,
       mainAxisSpacing: 12,
       children: [
-        _featureCard("Water Intake", Icons.water_drop, Colors.blue),
+        _featureCard("Water Intake", Icons.water_drop, Colors.blue, onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const WaterIntakeScreen()),
+          );
+        }),
         _featureCard("Reminders", Icons.alarm, Colors.purple),
         _featureCard("Device Status", Icons.devices, Colors.orange),
         _featureCard("Safe Sources", Icons.map, Colors.green),

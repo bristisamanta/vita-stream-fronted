@@ -31,6 +31,11 @@ dependencies:
     sdk: flutter
   intl: ^0.20.2   # updated version for l10n
 
+  # 🌱 New dependencies for crop irrigation dashboard
+  syncfusion_flutter_charts: 30.2.6+1
+  fl_chart: ^0.68.0
+  fluttertoast: ^8.2.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
