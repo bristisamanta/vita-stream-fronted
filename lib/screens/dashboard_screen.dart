@@ -16,9 +16,10 @@ import '../main.dart'; // gives access to flutterLocalNotificationsPlugin
 import 'pairing_screen.dart';
 import 'map_screen.dart';
 import 'tips_screen.dart';
-import 'water_intake_screen.dart'; // ✅ NEW IMPORT
-import 'remainder_screen.dart'; // ✅ NEW IMPORT
-import 'device_status_screen.dart'; // ✅ NEW IMPORT
+import 'water_intake_screen.dart';
+import 'remainder_screen.dart';
+import 'device_status_screen.dart';
+import 'safe_sources_screen.dart'; // ✅ NEW IMPORT
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -373,7 +374,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             MaterialPageRoute(builder: (context) => const DeviceStatusScreen()),
           );
         }),
-        _featureCard("Safe Sources", Icons.map, Colors.green),
+        _featureCard("Safe Sources", Icons.map, Colors.green, onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SafeSourcesScreen()),
+          );
+        }),
         _featureCard("Alerts", Icons.warning, Colors.red, onTap: () {
           Navigator.pushNamed(context, "/alert");
         }),
