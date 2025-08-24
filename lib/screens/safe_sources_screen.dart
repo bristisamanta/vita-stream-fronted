@@ -92,7 +92,7 @@ class _SafeSourcesScreenState extends State<SafeSourcesScreen> {
                   padding: const EdgeInsets.only(bottom: 20),
                   child: _glassCard(_buildSourceCard(source)),
                 );
-              }).toList(),
+              }),
             ],
           ),
         ),
@@ -181,5 +181,3 @@ class _SafeSourcesScreenState extends State<SafeSourcesScreen> {
     );
   }
 }
-
-

@@ -27,7 +27,7 @@ class _WaterIntakeScreenState extends State<WaterIntakeScreen> {
     setState(() {
       consumed += amount;
       intakeLogs.insert(0, {
-        "time": "${TimeOfDay.now().format(context)}",
+        "time": TimeOfDay.now().format(context),
         "amount": "$amount ml",
       });
     });

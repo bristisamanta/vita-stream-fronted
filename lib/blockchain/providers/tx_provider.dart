@@ -81,7 +81,9 @@ class TxProvider with ChangeNotifier {
 
   @override
   void dispose() {
-    for (final t in _pollers.values) t.cancel();
+    for (final t in _pollers.values) {
+      t.cancel();
+    }
     super.dispose();
   }
 }
