@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
+
 // add these along with existing imports
 import 'blockchain/wallet_manager.dart';
 import 'blockchain/tx_submitter.dart';
@@ -11,7 +12,6 @@ import 'blockchain/ui/wallet_screen.dart';
 import 'blockchain/ui/tx_screen.dart';
 import 'blockchain/ui/tx_history_screen.dart';
 import 'blockchain/ui/subsidy_screen.dart';
-
 
 // 🌍 Localization
 import 'l10n/app_localizations.dart';
@@ -56,28 +56,29 @@ Future<void> main() async {
       }
     },
   );
-// create blockchain helpers
-final walletManager = WalletManager();
-final txSubmitter = TxSubmitter(baseUrl: 'https://your-backend.example.com'); // <- change this
+
+  // create blockchain helpers
+  final walletManager = WalletManager();
+  final txSubmitter = TxSubmitter(baseUrl: 'https://your-backend.example.com'); // <- change this
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
-         // add these two:
-    ChangeNotifierProvider(
-      create: (_) => WalletProvider(
-        manager: walletManager,
-        backendBaseUrl: 'https://your-backend.example.com',
-      ),
-    ),
-    ChangeNotifierProvider(
-      create: (_) => TxProvider(
-        submitter: txSubmitter,
-        notifications: flutterLocalNotificationsPlugin,
-      ),
-    ),
+        // add these two:
+        ChangeNotifierProvider(
+          create: (_) => WalletProvider(
+            manager: walletManager,
+            backendBaseUrl: 'https://your-backend.example.com',
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => TxProvider(
+            submitter: txSubmitter,
+            notifications: flutterLocalNotificationsPlugin,
+          ),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -132,9 +133,9 @@ class MyApp extends StatelessWidget {
             '/profile': (context) => const ProfileScreen(),
             '/alert': (context) => const AlertScreen(),
             '/wallet': (context) => const WalletScreen(),
-  '/tx': (context) => const TxScreen(),
-  '/tx_history': (context) => const TxHistoryScreen(),
-  '/subsidy': (context) => const SubsidyScreen(),
+            '/tx': (context) => const TxScreen(),
+            '/tx_history': (context) => const TxHistoryScreen(),
+            '/subsidy': (context) => const SubsidyScreen(),
           },
         );
       },

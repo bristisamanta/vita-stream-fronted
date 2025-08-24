@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import '../l10n/app_localizations.dart';
 
 class WaterIntakeScreen extends StatefulWidget {
   const WaterIntakeScreen({super.key});
@@ -34,23 +35,24 @@ class _WaterIntakeScreenState extends State<WaterIntakeScreen> {
   }
 
   void _setGoalDialog() {
+    final t = AppLocalizations.of(context)!; // ✅
     final TextEditingController controller =
         TextEditingController(text: dailyGoal.toString());
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Set Daily Goal"),
+        title: Text(t.setDailyGoal), // ✅ localized
         content: TextField(
           controller: controller,
           keyboardType: TextInputType.number,
-          decoration: const InputDecoration(
-            labelText: "Enter goal in ml",
+          decoration: InputDecoration(
+            labelText: t.enterGoal, // ✅
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel"),
+            child: Text(t.cancel), // ✅
           ),
           ElevatedButton(
             onPressed: () {
@@ -59,7 +61,7 @@ class _WaterIntakeScreenState extends State<WaterIntakeScreen> {
               });
               Navigator.pop(context);
             },
-            child: const Text("Save"),
+            child: Text(t.save), // ✅
           ),
         ],
       ),
@@ -89,9 +91,12 @@ class _WaterIntakeScreenState extends State<WaterIntakeScreen> {
           }).toList(),
           borderData: FlBorderData(show: false),
           titlesData: FlTitlesData(
-            leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            leftTitles:
+                const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            rightTitles:
+                const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles:
+                const AxisTitles(sideTitles: SideTitles(showTitles: false)),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
@@ -112,18 +117,19 @@ class _WaterIntakeScreenState extends State<WaterIntakeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!; // ✅ localization
     double progress = consumed / dailyGoal;
     if (progress > 1) progress = 1;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Water Intake"),
+        title: Text(t.waterIntakeTitle), // ✅
         backgroundColor: Colors.blueAccent,
         actions: [
           IconButton(
             onPressed: _setGoalDialog,
             icon: const Icon(Icons.edit),
-            tooltip: "Set Daily Goal",
+            tooltip: t.setDailyGoal, // ✅
           ),
         ],
       ),
@@ -150,7 +156,7 @@ class _WaterIntakeScreenState extends State<WaterIntakeScreen> {
                 child: Column(
                   children: [
                     Text(
-                      "Daily Goal: $dailyGoal ml",
+                      "${t.dailyGoal}: $dailyGoal ml", // ✅
                       style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                     const SizedBox(height: 10),
@@ -163,7 +169,7 @@ class _WaterIntakeScreenState extends State<WaterIntakeScreen> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      "Consumed: $consumed ml",
+                      "${t.consumed}: $consumed ml", // ✅
                       style: const TextStyle(
                           fontSize: 18,
                           color: Colors.white,
@@ -186,9 +192,9 @@ class _WaterIntakeScreenState extends State<WaterIntakeScreen> {
                   color: remindersOn ? Colors.green : Colors.red,
                 ),
                 title: Text(remindersOn
-                    ? "Hydration Reminders: ON"
-                    : "Hydration Reminders: OFF"),
-                subtitle: Text("Next reminder: $nextReminder"),
+                    ? t.hydrationRemindersOn
+                    : t.hydrationRemindersOff), // ✅
+                subtitle: Text("${t.nextReminder}: $nextReminder"), // ✅
                 trailing: Switch(
                   value: remindersOn,
                   onChanged: (val) {
@@ -211,9 +217,9 @@ class _WaterIntakeScreenState extends State<WaterIntakeScreen> {
                 padding: const EdgeInsets.all(12.0),
                 child: Column(
                   children: [
-                    const Text("Weekly Intake Trend",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    Text(t.weeklyTrend,
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)), // ✅
                     _buildWeeklyChart(),
                   ],
                 ),
@@ -222,8 +228,9 @@ class _WaterIntakeScreenState extends State<WaterIntakeScreen> {
             const SizedBox(height: 20),
 
             // Intake Logs
-            const Text("Today's Logs",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text(t.todayLogs,
+                style: const TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.bold)), // ✅
             const SizedBox(height: 8),
             Expanded(
               child: ListView.builder(
@@ -247,7 +254,7 @@ class _WaterIntakeScreenState extends State<WaterIntakeScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _addWater(250), // adds 250 ml
         icon: const Icon(Icons.add),
-        label: const Text("Add 250 ml"),
+        label: Text(t.addWater), // ✅
         backgroundColor: Colors.blueAccent,
       ),
     );

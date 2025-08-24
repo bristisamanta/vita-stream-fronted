@@ -1,17 +1,119 @@
 {
+  "appName": "VitaStream",
+
   "pairDevice": "Pair Device",
-  "vitaStream": "VitaStream",
-  "safeWaterSources": "Safe Water Sources",
+  "dashboard": "Dashboard",
+  "map": "Map",
   "tips": "Tips",
-  "phValue": "pH Value",
-  "battery": "Battery",
-  "lastSync": "Last Sync",
-  "safeWaterTips": "Safe Water Tips",
-  "unsafeWaterActions": "Unsafe Water Actions",
-  "boilWater": "Boil water before drinking",
-  "useFilters": "Use proper water filters",
-  "storeContainers": "Store in clean containers",
-  "avoidDrinking": "Avoid drinking until tested",
-  "reportAuthority": "Report to local authority"
+  "safeWaterSources": "Safe Water Sources",
+
+  "languageEnglish": "English",
+  "languageHindi": "Hindi",
+  "languageBengali": "Bengali",
+
+  "notificationUnsafeTitle": "Unsafe Water Quality!",
+  "notificationUnsafeBody": "Tap to view details",
+
+  "riskBannerTitle": "Unsafe Water Quality Detected!",
+  "riskBannerSubtitle": "Immediate action required ⚠️",
+
+  "helloName": "Hello {name} 👋",
+  "@helloName": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "dashboardMotto": "Trust yourself and keep going.",
+
+  "readingPH": "pH",
+  "readingTDS": "TDS",
+  "readingNitrate": "Nitrate",
+  "readingHigh": "High",
+
+  "farmHealthTitle": "Farm Health Score",
+  "farmHealthHint": "{percent}% Healthy - Monitor water quality closely",
+  "@farmHealthHint": {
+    "placeholders": { "percent": { "type": "int" } }
+  },
+
+  "featureWaterIntake": "Water Intake",
+  "featureReminders": "Reminders",
+  "featureDeviceStatus": "Device Status",
+  "featureSafeSources": "Safe Sources",
+  "featureAlerts": "Alerts",
+
+  "videoComingSoon": "🎥 Tutorial Video Coming Soon",
+
+  "blockchainServices": "Blockchain Services",
+  "wallet": "Wallet",
+  "sendTx": "Send Tx",
+  "subsidy": "Subsidy",
+
+  "fetchRiskFailed": "Failed to fetch risk data",
+
+  "bottomPair": "Pair",
+  "bottomDashboard": "Dashboard",
+  "bottomMap": "Map",
+  "bottomTips": "Tips",
+
+"waterIntakeTitle": "Water Intake",
+  "setDailyGoal": "Set Daily Goal",
+  "enterGoal": "Enter goal in ml",
+  "cancel": "Cancel",
+  "save": "Save",
+  "dailyGoal": "Daily Goal",
+  "consumed": "Consumed",
+  "hydrationRemindersOn": "Hydration Reminders: ON",
+  "hydrationRemindersOff": "Hydration Reminders: OFF",
+  "nextReminder": "Next reminder",
+  "weeklyTrend": "Weekly Intake Trend",
+  "todayLogs": "Today's Logs",
+  "addWater": "Add 250 ml",
+
+
+  "remindersTitle": "Crop Watering Reminders",
+  "recommendedTimes": "Recommended Watering Times",
+  "setCustomTimes": "Set Custom Watering Times",
+  "start": "Start",
+  "stop": "Stop",
+  "select": "Select",
+  "saveReminder": "Save Reminder",
+  "activeReminders": "Active Reminders",
+  "tipsAlerts": "Tips / Alerts",
+  "tip1": "Water early morning or late evening",
+  "tip2": "Avoid watering during heavy rain",
+  "tip3": "Ensure irrigation lasts at least 2 hours",
+
   
+  "safeWaterSourcesTitle": "Safe Water Sources",
+  "searchSourcesHint": "Search sources...",
+  "status": "Status",
+  "distance": "Distance",
+  "river": "River",
+"well": "Well",
+"pond": "Pond",
+"stream": "Stream",
+"statusGood": "Good",
+"statusModerate": "Moderate",
+"statusSafe": "Safe",
+"statusUnsafe": "Unsafe",
+
+  "@@locale": "en",
+  "deviceStatusTitle": "Device Status",
+  "connectedDevice": "Connected Device",
+  "batteryLevel": "Battery Level",
+  "deviceConnection": "Device Connection",
+  "connected": "Connected",
+  "disconnected": "Disconnected",
+  "disconnect": "Disconnect",
+  "connect": "Connect",
+  "syncNow": "Sync Now",
+  "startSync": "Start Sync",
+  "lastUpdate": "Last Update",
+  "lastUpdateMessage": "Device synced 10 minutes ago",
+
+  "alerts": "Alerts",
+  "unsafeWaterTitle": "⚠️ Unsafe Water Quality Detected!",
+  "unsafeWaterMessage": "Please check your water filter device or switch to a safe source.",
+  "lowFilterTitle": "Low Filter Efficiency",
+  "lowFilterMessage": "Your filter may need cleaning or replacement soon.",
+  "resolve": "Resolve"
 }
