@@ -1,27 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
- // your localization import
-
-// Fallback localization class used when the generated `S` is not available.
-// You can remove this once your project's generated localization class `S`
-// is available via the appropriate import.
-class S {
-  final BuildContext context;
-  S._(this.context);
-  static S of(BuildContext context) => S._(context);
-
-  String get settings => 'Settings';
-  String get notifications => 'Notifications';
-  String get language => 'Language';
-  String get measurementUnits => 'Measurement Units';
-  String get cropType => 'Crop Type';
-  String get season => 'Season';
-  String get waterSource => 'Water Source';
-  String get soilType => 'Soil Type';
-  String get aboutApp => 'About App';
-  String get helpSupport => 'Help & Support';
-  String get logout => 'Logout';
-}
+import '../l10n/app_localizations.dart'; // ✅ Localization import
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -45,7 +24,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _loadSettings();
   }
 
-  // ✅ Load saved settings
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -68,16 +46,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  void _showAboutDialog(BuildContext context) {
+  void _showAboutDialog(BuildContext context, AppLocalizations t) {
     showAboutDialog(
       context: context,
       applicationName: "VitaStream",
       applicationVersion: "1.0.0",
       applicationIcon: const Icon(Icons.water_drop, color: Colors.teal),
       children: [
-        const Text("VitaStream is your water safety and health companion app."),
+        Text(t.aboutAppDescription), // localized description
         const SizedBox(height: 8),
-        const Text("Developed by Bristi & Amit 💙"),
+        Text(t.developedBy),
       ],
     );
   }
@@ -92,18 +70,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
       newLocale = const Locale("bn");
     }
 
-    // TODO: implement app-level locale change, e.g. call MyApp.setLocale(context, newLocale)
-    // If your main app exposes a static setter like MyApp.setLocale, import that file and call it here.
-    // For now we update local selection and persist it.
+    // TODO: call your app-level locale setter here
     setState(() => _selectedLanguage = languageCode);
     _saveSetting("language", languageCode);
   }
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!; // ✅ localization
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).settings), // localized title
+        title: Text(t.settings),
         backgroundColor: Colors.teal,
         centerTitle: true,
       ),
@@ -115,12 +93,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
               backgroundColor: Theme.of(context).primaryColor,
               child: const Icon(Icons.person, color: Colors.white),
             ),
-            title: const Text("Bristi Samanta"),
+            title: const Text("Bristi Samanta"), // You can make dynamic later
             subtitle: const Text("bristi@example.com"),
             trailing: const Icon(Icons.edit),
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Profile edit coming soon!")),
+                SnackBar(content: Text(t.profileEditTapped)),
               );
             },
           ),
@@ -129,19 +107,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
           // Password Reset
           ListTile(
             leading: const Icon(Icons.lock, color: Colors.teal),
-            title: const Text("Reset Password"),
+            title: Text(t.resetPassword),
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Password reset coming soon!")),
+                SnackBar(content: Text(t.resetPasswordComingSoon)),
               );
             },
           ),
           const Divider(),
 
-          // ✅ Notifications toggle
+          // Notifications toggle
           SwitchListTile(
             secondary: const Icon(Icons.notifications, color: Colors.teal),
-            title: Text(S.of(context).notifications),
+            title: Text(t.notifications),
             value: _notificationsEnabled,
             onChanged: (val) {
               setState(() => _notificationsEnabled = val);
@@ -150,37 +128,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           const Divider(),
 
-          // ✅ Language Selection (Merged multilingual support here)
+          // Language selection
           ListTile(
             leading: const Icon(Icons.language, color: Colors.teal),
-            title: Text(S.of(context).language),
+            title: Text(t.language),
             trailing: DropdownButton<String>(
               value: _selectedLanguage,
               underline: const SizedBox(),
-              items: const [
-                DropdownMenuItem(value: "English", child: Text("English")),
-                DropdownMenuItem(value: "Hindi", child: Text("हिन्दी")),
-                DropdownMenuItem(value: "Bengali", child: Text("বাংলা")),
+              items: [
+                DropdownMenuItem(value: "English", child: Text(t.english)),
+                DropdownMenuItem(value: "Hindi", child: Text(t.hindi)),
+                DropdownMenuItem(value: "Bengali", child: Text(t.bengali)),
               ],
               onChanged: (value) {
-                if (value != null) {
-                  _changeLanguage(value);
-                }
+                if (value != null) _changeLanguage(value);
               },
             ),
           ),
           const Divider(),
 
-          // ✅ Measurement Units
+          // Measurement units
           ListTile(
             leading: const Icon(Icons.straighten, color: Colors.teal),
-            title: Text(S.of(context).measurementUnits),
+            title: Text(t.measurementUnits),
             trailing: DropdownButton<String>(
               value: _measurementUnit,
               underline: const SizedBox(),
-              items: const [
-                DropdownMenuItem(value: "Metric", child: Text("Metric (°C, Ltr)")),
-                DropdownMenuItem(value: "Imperial", child: Text("Imperial (°F, Gallon)")),
+              items: [
+                DropdownMenuItem(
+                    value: "Metric", child: Text(t.metricUnits)),
+                DropdownMenuItem(
+                    value: "Imperial", child: Text(t.imperialUnits)),
               ],
               onChanged: (value) {
                 if (value != null) {
@@ -192,17 +170,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           const Divider(),
 
-          // ✅ Farm Profile
+          // Farm profile
           ListTile(
             leading: const Icon(Icons.agriculture, color: Colors.teal),
-            title: Text(S.of(context).cropType),
+            title: Text(t.cropType),
             trailing: DropdownButton<String>(
               value: _selectedCrop,
               underline: const SizedBox(),
-              items: const [
-                DropdownMenuItem(value: "Rice", child: Text("Rice")),
-                DropdownMenuItem(value: "Wheat", child: Text("Wheat")),
-                DropdownMenuItem(value: "Maize", child: Text("Maize")),
+              items: [
+                DropdownMenuItem(value: "Rice", child: Text(t.rice)),
+                DropdownMenuItem(value: "Wheat", child: Text(t.wheat)),
+                DropdownMenuItem(value: "Maize", child: Text(t.maize)),
               ],
               onChanged: (value) {
                 if (value != null) {
@@ -214,14 +192,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           ListTile(
             leading: const Icon(Icons.calendar_today, color: Colors.teal),
-            title: Text(S.of(context).season),
+            title: Text(t.season),
             trailing: DropdownButton<String>(
               value: _season,
               underline: const SizedBox(),
-              items: const [
-                DropdownMenuItem(value: "Kharif", child: Text("Kharif")),
-                DropdownMenuItem(value: "Rabi", child: Text("Rabi")),
-                DropdownMenuItem(value: "Zaid", child: Text("Zaid")),
+              items: [
+                DropdownMenuItem(value: "Kharif", child: Text(t.kharif)),
+                DropdownMenuItem(value: "Rabi", child: Text(t.rabi)),
+                DropdownMenuItem(value: "Zaid", child: Text(t.zaid)),
               ],
               onChanged: (value) {
                 if (value != null) {
@@ -233,14 +211,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           ListTile(
             leading: const Icon(Icons.water, color: Colors.teal),
-            title: Text(S.of(context).waterSource),
+            title: Text(t.waterSource),
             trailing: DropdownButton<String>(
               value: _waterSource,
               underline: const SizedBox(),
-              items: const [
-                DropdownMenuItem(value: "Well", child: Text("Well")),
-                DropdownMenuItem(value: "Tubewell", child: Text("Tubewell")),
-                DropdownMenuItem(value: "Canal", child: Text("Canal")),
+              items: [
+                DropdownMenuItem(value: "Well", child: Text(t.well)),
+                DropdownMenuItem(value: "Tubewell", child: Text(t.tubewell)),
+                DropdownMenuItem(value: "Canal", child: Text(t.canal)),
               ],
               onChanged: (value) {
                 if (value != null) {
@@ -252,14 +230,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           ListTile(
             leading: const Icon(Icons.landscape, color: Colors.teal),
-            title: Text(S.of(context).soilType),
+            title: Text(t.soilType),
             trailing: DropdownButton<String>(
               value: _soilType,
               underline: const SizedBox(),
-              items: const [
-                DropdownMenuItem(value: "Loamy", child: Text("Loamy")),
-                DropdownMenuItem(value: "Clay", child: Text("Clay")),
-                DropdownMenuItem(value: "Sandy", child: Text("Sandy")),
+              items: [
+                DropdownMenuItem(value: "Loamy", child: Text(t.loamy)),
+                DropdownMenuItem(value: "Clay", child: Text(t.clay)),
+                DropdownMenuItem(value: "Sandy", child: Text(t.sandy)),
               ],
               onChanged: (value) {
                 if (value != null) {
@@ -271,21 +249,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           const Divider(),
 
-          // About App
+          // About app
           ListTile(
             leading: const Icon(Icons.info, color: Colors.teal),
-            title: Text(S.of(context).aboutApp),
-            onTap: () => _showAboutDialog(context),
+            title: Text(t.aboutApp),
+            onTap: () => _showAboutDialog(context, t),
           ),
           const Divider(),
 
           // Help & Support
           ListTile(
             leading: const Icon(Icons.help, color: Colors.teal),
-            title: Text(S.of(context).helpSupport),
+            title: Text(t.helpSupport),
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Support page coming soon!")),
+                SnackBar(content: Text(t.supportComingSoon)),
               );
             },
           ),
@@ -294,7 +272,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           // Logout
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
-            title: Text(S.of(context).logout),
+            title: Text(t.logout),
             onTap: () {
               Navigator.pushReplacementNamed(context, "/login");
             },

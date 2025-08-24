@@ -286,4 +286,206 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get resolve => 'সমাধান করুন';
+
+
+  @override
+  String get scanningDevices => 'ওয়াইফাই ডিভাইস স্ক্যান করা হচ্ছে...';
+
+  @override
+  String get noDevicesFound => 'কোনো ডিভাইস পাওয়া যায়নি ❌';
+
+  @override
+  String get scanComplete => 'স্ক্যান সম্পন্ন ✅';
+
+  @override
+  String connectingTo(Object deviceName) {
+    return '$deviceName-এর সাথে সংযোগ হচ্ছে...';
+  }
+
+  @override
+  String connectedTo(Object deviceName) {
+    return '$deviceName-এর সাথে সংযুক্ত ✅';
+  }
+
+  @override
+  String pairingWizard(Object deviceName) {
+    return 'পেয়ারিং উইজার্ড: $deviceName';
+  }
+
+  @override
+  String get stepEnterWifiCredentials => 'ধাপ ১: WiFi তথ্য প্রবেশ করান';
+
+  @override
+  String get finishPairing => 'পেয়ারিং শেষ করুন';
+
+  @override
+  String get devicePairedSuccessfully => 'ডিভাইস সফলভাবে পেয়ার করা হয়েছে 🎉';
+
+  @override
+  String get scanDevices => 'ডিভাইস স্ক্যান করুন';
+
+  @override
+  String get scanning => 'স্ক্যান করা হচ্ছে...';
+
+  @override
+  String get battery => 'ব্যাটারি';
+
+  @override
+  String profileName(Object name) {
+    return 'হ্যালো $name';
+  }
+
+  @override
+  String get profilePhone => 'ফোন';
+
+  @override
+  String get profileEdit => 'প্রোফাইল সম্পাদনা করুন';
+
+  @override
+  String get profileEditTapped => 'প্রোফাইল সম্পাদনায় ট্যাপ করা হয়েছে';
+
+  @override
+  String get profileSettings => 'সেটিংস';
+
+  @override
+  String get profileLogout => 'লগ আউট';
+
+  @override
+  String get settings => 'সেটিংস';
+
+  @override
+  String get notifications => 'বিজ্ঞপ্তি';
+
+  @override
+  String get language => 'ভাষা';
+
+  @override
+  String get english => 'ইংরেজি';
+
+  @override
+  String get hindi => 'হিন্দি';
+
+  @override
+  String get bengali => 'বাংলা';
+
+  @override
+  String get measurementUnits => 'পরিমাপ একক';
+
+  @override
+  String get metricUnits => 'মেট্রিক (°C, লিটার)';
+
+  @override
+  String get imperialUnits => 'ইম্পেরিয়াল (°F, গ্যালন)';
+
+  @override
+  String get cropType => 'ফসলের ধরন';
+
+  @override
+  String get rice => 'চাল';
+
+  @override
+  String get wheat => 'গম';
+
+  @override
+  String get maize => 'ভুট্টা';
+
+  @override
+  String get season => 'মৌসুম';
+
+  @override
+  String get kharif => 'খারিফ';
+
+  @override
+  String get rabi => 'রাবি';
+
+  @override
+  String get zaid => 'জায়েদ';
+
+  @override
+  String get waterSource => 'জল উৎস';
+
+  @override
+  String get tubewell => 'টিউবওয়েল';
+
+  @override
+  String get canal => 'নালা';
+
+  @override
+  String get soilType => 'মাটির ধরন';
+
+  @override
+  String get loamy => 'দোঁমাট';
+
+  @override
+  String get clay => 'কাদা';
+
+  @override
+  String get sandy => 'বালি';
+
+  @override
+  String get aboutApp => 'অ্যাপ সম্বন্ধে';
+
+  @override
+  String get helpSupport => 'সহায়তা এবং সমর্থন';
+
+  @override
+  String get logout => 'লগ আউট';
+
+  @override
+  String get resetPassword => 'পাসওয়ার্ড রিসেট';
+
+  @override
+  String get resetPasswordComingSoon => 'পাসওয়ার্ড রিসেট শীঘ্রই আসছে!';
+
+  @override
+  String get aboutAppDescription =>
+      'VitaStream আপনার পানির সুরক্ষা ও স্বাস্থ্য সহায়ক অ্যাপ।';
+
+  @override
+  String get developedBy => 'উন্নত করেছেন: ব্রিস্টি এবং অমিত 💙';
+
+  @override
+  String get supportComingSoon => 'সাপোর্ট পেজ শীঘ্রই আসছে!';
+
+  @override
+  String get safeWater => '✅ নিরাপদ পানি';
+
+  @override
+  String get unsafeWater => '⚠️ বিপজ্জনক পানি';
+
+  @override
+  String get phValue => 'pH মান';
+
+  @override
+  String get lastSync => 'শেষ সিঙ্ক';
+
+  @override
+  String get safeTips => '💧 নিরাপদ পানি পরামর্শ';
+
+  @override
+  String get boilWater => 'পানির আগে উবাল দিন';
+
+  @override
+  String get useFilters => 'সঠিক পানি ফিল্টার ব্যবহার করুন';
+
+  @override
+  String get cleanContainers => 'পরিষ্কার কন্টেইনারে রাখুন';
+
+  @override
+  String get unsafeActions => '⚠️ বিপজ্জনক পানি কার্যক্রম';
+
+  @override
+  String get avoidDrinking => 'পরীক্ষা না হওয়া পর্যন্ত পান এড়িয়ে চলুন';
+
+  @override
+  String get reportAuthority => 'স্থানীয় কর্তৃপক্ষকে রিপোর্ট করুন';
+
+  @override
+  String get factLoading => '💡 তথ্য লোড হচ্ছে...';
+
+  @override
+  String get factFallback => '💡 হাইড্রেটেড এবং নিরাপদ থাকুন!';
+
+  @override
+  String get factError => '💡 তথ্য লোড করা যায়নি। পরে চেষ্টা করুন।';
 }
