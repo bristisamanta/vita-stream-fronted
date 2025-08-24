@@ -288,35 +288,203 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resolve => 'Resolve';
 
   @override
-  String get welcomeBack => 'Welcome Back 👋';
+  String get scanningDevices => 'Scanning WiFi devices...';
 
   @override
-  String get loginContinue => 'Login to continue';
+  String get noDevicesFound => 'No devices found ❌';
 
   @override
-  String get phoneNumber => 'Phone Number';
+  String get scanComplete => 'Scan complete ✅';
 
   @override
-  String get enterOtp => 'Enter OTP';
+  String connectingTo(Object deviceName) {
+    return 'Connecting to $deviceName...';
+  }
 
   @override
-  String get errorPhone => 'Please enter phone number';
+  String connectedTo(Object deviceName) {
+    return 'Connected to $deviceName ✅';
+  }
 
   @override
-  String get otpSent => 'OTP sent';
+  String pairingWizard(Object deviceName) {
+    return 'Pairing Wizard: $deviceName';
+  }
 
   @override
-  String get invalidOtp => 'Invalid OTP';
+  String get stepEnterWifiCredentials => 'Step 1: Enter WiFi credentials';
 
   @override
-  String get login => 'Login';
+  String get finishPairing => 'Finish Pairing';
 
   @override
-  String get getOtp => 'Get OTP';
+  String get devicePairedSuccessfully => 'Device paired successfully 🎉';
 
   @override
-  String get noAccount => 'Don\'t have an account? ';
+  String get scanDevices => 'Scan Devices';
 
   @override
-  String get signUp => 'Sign Up';
+  String get scanning => 'Scanning...';
+
+  @override
+  String get battery => 'Battery';
+
+  @override
+  String profileName(Object name) {
+    return 'Hello $name';
+  }
+
+  @override
+  String get profilePhone => 'Phone';
+
+  @override
+  String get profileEdit => 'Edit Profile';
+
+  @override
+  String get profileEditTapped => 'Edit Profile tapped';
+
+  @override
+  String get profileSettings => 'Settings';
+
+  @override
+  String get profileLogout => 'Logout';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get hindi => 'हिन्दी';
+
+  @override
+  String get bengali => 'বাংলা';
+
+  @override
+  String get measurementUnits => 'Measurement Units';
+
+  @override
+  String get metricUnits => 'Metric (°C, Ltr)';
+
+  @override
+  String get imperialUnits => 'Imperial (°F, Gallon)';
+
+  @override
+  String get cropType => 'Crop Type';
+
+  @override
+  String get rice => 'Rice';
+
+  @override
+  String get wheat => 'Wheat';
+
+  @override
+  String get maize => 'Maize';
+
+  @override
+  String get season => 'Season';
+
+  @override
+  String get kharif => 'Kharif';
+
+  @override
+  String get rabi => 'Rabi';
+
+  @override
+  String get zaid => 'Zaid';
+
+  @override
+  String get waterSource => 'Water Source';
+
+  @override
+  String get tubewell => 'Tubewell';
+
+  @override
+  String get canal => 'Canal';
+
+  @override
+  String get soilType => 'Soil Type';
+
+  @override
+  String get loamy => 'Loamy';
+
+  @override
+  String get clay => 'Clay';
+
+  @override
+  String get sandy => 'Sandy';
+
+  @override
+  String get aboutApp => 'About App';
+
+  @override
+  String get helpSupport => 'Help & Support';
+
+  @override
+  String get logout => 'Logout';
+
+  @override
+  String get resetPassword => 'Reset Password';
+
+  @override
+  String get resetPasswordComingSoon => 'Password reset coming soon!';
+
+  @override
+  String get aboutAppDescription =>
+      'VitaStream is your water safety and health companion app.';
+
+  @override
+  String get developedBy => 'Developed by Bristi & Amit 💙';
+
+  @override
+  String get supportComingSoon => 'Support page coming soon!';
+
+  @override
+  String get safeWater => '✅ Safe Water';
+
+  @override
+  String get unsafeWater => '⚠️ Unsafe Water';
+
+  @override
+  String get phValue => 'pH Value';
+
+  @override
+  String get lastSync => 'Last Sync';
+
+  @override
+  String get safeTips => '💧 Safe Water Tips';
+
+  @override
+  String get boilWater => 'Boil water before drinking';
+
+  @override
+  String get useFilters => 'Use proper water filters';
+
+  @override
+  String get cleanContainers => 'Store in clean containers';
+
+  @override
+  String get unsafeActions => '⚠️ Unsafe Water Actions';
+
+  @override
+  String get avoidDrinking => 'Avoid drinking until tested';
+
+  @override
+  String get reportAuthority => 'Report to local authority';
+
+  @override
+  String get factLoading => '💡 Loading fact...';
+
+  @override
+  String get factFallback => '💡 Stay hydrated and safe!';
+
+  @override
+  String get factError => '💡 Could not load fact. Try again later.';
 }

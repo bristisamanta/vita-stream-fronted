@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'settings_screen.dart'; // ✅ Import your SettingsScreen
+import '../l10n/app_localizations.dart'; // ✅ Add localization
+import 'settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -13,7 +14,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   File? _profileImage;
 
-  /// Pick image from gallery
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -27,6 +27,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!; // ✅ localization
+
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: Column(
@@ -73,9 +75,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  "Bristi Samanta",
-                  style: TextStyle(
+                Text(
+                  t.profileName("Bristi Samanta"), // ✅ localized
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -104,15 +106,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
             child: Column(
-              children: const [
-                
+              children: [
                 Divider(),
                 ListTile(
-                  leading: Icon(Icons.phone, color: Colors.teal),
-                  title: Text("Phone"),
-                  subtitle: Text("+91 9876543210"),
+                  leading: const Icon(Icons.phone, color: Colors.teal),
+                  title: Text(t.profilePhone), // ✅ localized
+                  subtitle: const Text("+91 9876543210"),
                 ),
-               
               ],
             ),
           ),
@@ -124,24 +124,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               children: [
-                _buildActionTile(Icons.edit, "Edit Profile", Colors.blue, () {
-                  // For now just a snackbar
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Edit Profile tapped")),
-                  );
-                }),
+                _buildActionTile(
+                  Icons.edit,
+                  t.profileEdit, // ✅ localized
+                  Colors.blue,
+                  () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(t.profileEditTapped)),
+                    );
+                  },
+                ),
                 const SizedBox(height: 10),
-                _buildActionTile(Icons.settings, "Settings", Colors.orange, () {
-                  // ✅ Navigate to same Settings screen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const SettingsScreen()),
-                  );
-                }),
+                _buildActionTile(
+                  Icons.settings,
+                  t.profileSettings, // ✅ localized
+                  Colors.orange,
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const SettingsScreen()),
+                    );
+                  },
+                ),
                 const SizedBox(height: 10),
-                _buildActionTile(Icons.logout, "Logout", Colors.red, () {
-                  Navigator.pop(context);
-                }),
+                _buildActionTile(
+                  Icons.logout,
+                  t.profileLogout, // ✅ localized
+                  Colors.red,
+                  () {
+                    Navigator.pop(context);
+                  },
+                ),
               ],
             ),
           ),
@@ -150,7 +164,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  /// 🔹 Action Tile Widget
   Widget _buildActionTile(
       IconData icon, String label, Color color, VoidCallback onTap) {
     return GestureDetector(
@@ -175,8 +188,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Expanded(
               child: Text(
                 label,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                style: const TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.w500),
               ),
             ),
             const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),

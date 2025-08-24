@@ -646,71 +646,389 @@ abstract class AppLocalizations {
   /// **'Resolve'**
   String get resolve;
 
-  /// No description provided for @welcomeBack.
+  /// No description provided for @scanningDevices.
   ///
   /// In en, this message translates to:
-  /// **'Welcome Back 👋'**
-  String get welcomeBack;
+  /// **'Scanning WiFi devices...'**
+  String get scanningDevices;
 
-  /// No description provided for @loginContinue.
+  /// No description provided for @noDevicesFound.
   ///
   /// In en, this message translates to:
-  /// **'Login to continue'**
-  String get loginContinue;
+  /// **'No devices found ❌'**
+  String get noDevicesFound;
 
-  /// No description provided for @phoneNumber.
+  /// No description provided for @scanComplete.
   ///
   /// In en, this message translates to:
-  /// **'Phone Number'**
-  String get phoneNumber;
+  /// **'Scan complete ✅'**
+  String get scanComplete;
 
-  /// No description provided for @enterOtp.
+  /// No description provided for @connectingTo.
   ///
   /// In en, this message translates to:
-  /// **'Enter OTP'**
-  String get enterOtp;
+  /// **'Connecting to {deviceName}...'**
+  String connectingTo(Object deviceName);
 
-  /// No description provided for @errorPhone.
+  /// No description provided for @connectedTo.
   ///
   /// In en, this message translates to:
-  /// **'Please enter phone number'**
-  String get errorPhone;
+  /// **'Connected to {deviceName} ✅'**
+  String connectedTo(Object deviceName);
 
-  /// No description provided for @otpSent.
+  /// No description provided for @pairingWizard.
   ///
   /// In en, this message translates to:
-  /// **'OTP sent'**
-  String get otpSent;
+  /// **'Pairing Wizard: {deviceName}'**
+  String pairingWizard(Object deviceName);
 
-  /// No description provided for @invalidOtp.
+  /// No description provided for @stepEnterWifiCredentials.
   ///
   /// In en, this message translates to:
-  /// **'Invalid OTP'**
-  String get invalidOtp;
+  /// **'Step 1: Enter WiFi credentials'**
+  String get stepEnterWifiCredentials;
 
-  /// No description provided for @login.
+  /// No description provided for @finishPairing.
   ///
   /// In en, this message translates to:
-  /// **'Login'**
-  String get login;
+  /// **'Finish Pairing'**
+  String get finishPairing;
 
-  /// No description provided for @getOtp.
+  /// No description provided for @devicePairedSuccessfully.
   ///
   /// In en, this message translates to:
-  /// **'Get OTP'**
-  String get getOtp;
+  /// **'Device paired successfully 🎉'**
+  String get devicePairedSuccessfully;
 
-  /// No description provided for @noAccount.
+  /// No description provided for @scanDevices.
   ///
   /// In en, this message translates to:
-  /// **'Don\'t have an account? '**
-  String get noAccount;
+  /// **'Scan Devices'**
+  String get scanDevices;
 
-  /// No description provided for @signUp.
+  /// No description provided for @scanning.
   ///
   /// In en, this message translates to:
-  /// **'Sign Up'**
-  String get signUp;
+  /// **'Scanning...'**
+  String get scanning;
+
+  /// No description provided for @battery.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery'**
+  String get battery;
+
+  /// No description provided for @profileName.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello {name}'**
+  String profileName(Object name);
+
+  /// No description provided for @profilePhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get profilePhone;
+
+  /// No description provided for @profileEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get profileEdit;
+
+  /// No description provided for @profileEditTapped.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile tapped'**
+  String get profileEditTapped;
+
+  /// No description provided for @profileSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get profileSettings;
+
+  /// No description provided for @profileLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get profileLogout;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// No description provided for @hindi.
+  ///
+  /// In en, this message translates to:
+  /// **'हिन्दी'**
+  String get hindi;
+
+  /// No description provided for @bengali.
+  ///
+  /// In en, this message translates to:
+  /// **'বাংলা'**
+  String get bengali;
+
+  /// No description provided for @measurementUnits.
+  ///
+  /// In en, this message translates to:
+  /// **'Measurement Units'**
+  String get measurementUnits;
+
+  /// No description provided for @metricUnits.
+  ///
+  /// In en, this message translates to:
+  /// **'Metric (°C, Ltr)'**
+  String get metricUnits;
+
+  /// No description provided for @imperialUnits.
+  ///
+  /// In en, this message translates to:
+  /// **'Imperial (°F, Gallon)'**
+  String get imperialUnits;
+
+  /// No description provided for @cropType.
+  ///
+  /// In en, this message translates to:
+  /// **'Crop Type'**
+  String get cropType;
+
+  /// No description provided for @rice.
+  ///
+  /// In en, this message translates to:
+  /// **'Rice'**
+  String get rice;
+
+  /// No description provided for @wheat.
+  ///
+  /// In en, this message translates to:
+  /// **'Wheat'**
+  String get wheat;
+
+  /// No description provided for @maize.
+  ///
+  /// In en, this message translates to:
+  /// **'Maize'**
+  String get maize;
+
+  /// No description provided for @season.
+  ///
+  /// In en, this message translates to:
+  /// **'Season'**
+  String get season;
+
+  /// No description provided for @kharif.
+  ///
+  /// In en, this message translates to:
+  /// **'Kharif'**
+  String get kharif;
+
+  /// No description provided for @rabi.
+  ///
+  /// In en, this message translates to:
+  /// **'Rabi'**
+  String get rabi;
+
+  /// No description provided for @zaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Zaid'**
+  String get zaid;
+
+  /// No description provided for @waterSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Water Source'**
+  String get waterSource;
+
+  /// No description provided for @tubewell.
+  ///
+  /// In en, this message translates to:
+  /// **'Tubewell'**
+  String get tubewell;
+
+  /// No description provided for @canal.
+  ///
+  /// In en, this message translates to:
+  /// **'Canal'**
+  String get canal;
+
+  /// No description provided for @soilType.
+  ///
+  /// In en, this message translates to:
+  /// **'Soil Type'**
+  String get soilType;
+
+  /// No description provided for @loamy.
+  ///
+  /// In en, this message translates to:
+  /// **'Loamy'**
+  String get loamy;
+
+  /// No description provided for @clay.
+  ///
+  /// In en, this message translates to:
+  /// **'Clay'**
+  String get clay;
+
+  /// No description provided for @sandy.
+  ///
+  /// In en, this message translates to:
+  /// **'Sandy'**
+  String get sandy;
+
+  /// No description provided for @aboutApp.
+  ///
+  /// In en, this message translates to:
+  /// **'About App'**
+  String get aboutApp;
+
+  /// No description provided for @helpSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Help & Support'**
+  String get helpSupport;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logout;
+
+  /// No description provided for @resetPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get resetPassword;
+
+  /// No description provided for @resetPasswordComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset coming soon!'**
+  String get resetPasswordComingSoon;
+
+  /// No description provided for @aboutAppDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'VitaStream is your water safety and health companion app.'**
+  String get aboutAppDescription;
+
+  /// No description provided for @developedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Developed by Bristi & Amit 💙'**
+  String get developedBy;
+
+  /// No description provided for @supportComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Support page coming soon!'**
+  String get supportComingSoon;
+
+  /// No description provided for @safeWater.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ Safe Water'**
+  String get safeWater;
+
+  /// No description provided for @unsafeWater.
+  ///
+  /// In en, this message translates to:
+  /// **'⚠️ Unsafe Water'**
+  String get unsafeWater;
+
+  /// No description provided for @phValue.
+  ///
+  /// In en, this message translates to:
+  /// **'pH Value'**
+  String get phValue;
+
+  /// No description provided for @lastSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Sync'**
+  String get lastSync;
+
+  /// No description provided for @safeTips.
+  ///
+  /// In en, this message translates to:
+  /// **'💧 Safe Water Tips'**
+  String get safeTips;
+
+  /// No description provided for @boilWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Boil water before drinking'**
+  String get boilWater;
+
+  /// No description provided for @useFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Use proper water filters'**
+  String get useFilters;
+
+  /// No description provided for @cleanContainers.
+  ///
+  /// In en, this message translates to:
+  /// **'Store in clean containers'**
+  String get cleanContainers;
+
+  /// No description provided for @unsafeActions.
+  ///
+  /// In en, this message translates to:
+  /// **'⚠️ Unsafe Water Actions'**
+  String get unsafeActions;
+
+  /// No description provided for @avoidDrinking.
+  ///
+  /// In en, this message translates to:
+  /// **'Avoid drinking until tested'**
+  String get avoidDrinking;
+
+  /// No description provided for @reportAuthority.
+  ///
+  /// In en, this message translates to:
+  /// **'Report to local authority'**
+  String get reportAuthority;
+
+  /// No description provided for @factLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'💡 Loading fact...'**
+  String get factLoading;
+
+  /// No description provided for @factFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'💡 Stay hydrated and safe!'**
+  String get factFallback;
+
+  /// No description provided for @factError.
+  ///
+  /// In en, this message translates to:
+  /// **'💡 Could not load fact. Try again later.'**
+  String get factError;
 }
 
 class _AppLocalizationsDelegate

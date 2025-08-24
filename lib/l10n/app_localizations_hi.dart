@@ -288,35 +288,203 @@ class AppLocalizationsHi extends AppLocalizations {
   String get resolve => 'सुलझाएं';
 
   @override
-  String get welcomeBack => 'वापस स्वागत है 👋';
+  String get scanningDevices => 'WiFi डिवाइस स्कैन हो रहा है...';
 
   @override
-  String get loginContinue => 'जारी रखने के लिए लॉगिन करें';
+  String get noDevicesFound => 'कोई डिवाइस नहीं मिला ❌';
 
   @override
-  String get phoneNumber => 'फ़ोन नंबर';
+  String get scanComplete => 'स्कैन पूरा ✅';
 
   @override
-  String get enterOtp => 'OTP दर्ज करें';
+  String connectingTo(Object deviceName) {
+    return '$deviceName से कनेक्ट हो रहा है...';
+  }
 
   @override
-  String get errorPhone => 'कृपया फ़ोन नंबर दर्ज करें';
+  String connectedTo(Object deviceName) {
+    return '$deviceName से कनेक्टेड ✅';
+  }
 
   @override
-  String get otpSent => 'OTP भेजा गया';
+  String pairingWizard(Object deviceName) {
+    return 'पेयरिंग विज़ार्ड: $deviceName';
+  }
 
   @override
-  String get invalidOtp => 'अमान्य OTP';
+  String get stepEnterWifiCredentials => 'स्टेप 1: WiFi जानकारी डालें';
 
   @override
-  String get login => 'लॉगिन';
+  String get finishPairing => 'पेयरिंग समाप्त करें';
 
   @override
-  String get getOtp => 'OTP प्राप्त करें';
+  String get devicePairedSuccessfully => 'डिवाइस सफलतापूर्वक पेयर किया गया 🎉';
 
   @override
-  String get noAccount => 'क्या आपका खाता नहीं है? ';
+  String get scanDevices => 'डिवाइस स्कैन करें';
 
   @override
-  String get signUp => 'साइन अप करें';
+  String get scanning => 'स्कैन हो रहा है...';
+
+  @override
+  String get battery => 'बैटरी';
+
+  @override
+  String profileName(Object name) {
+    return 'नमस्ते $name';
+  }
+
+  @override
+  String get profilePhone => 'फोन';
+
+  @override
+  String get profileEdit => 'प्रोफ़ाइल संपादित करें';
+
+  @override
+  String get profileEditTapped => 'प्रोफ़ाइल संपादित पर टैप किया गया';
+
+  @override
+  String get profileSettings => 'सेटिंग्स';
+
+  @override
+  String get profileLogout => 'लॉग आउट';
+
+  @override
+  String get settings => 'सेटिंग्स';
+
+  @override
+  String get notifications => 'सूचनाएं';
+
+  @override
+  String get language => 'भाषा';
+
+  @override
+  String get english => 'अंग्रेज़ी';
+
+  @override
+  String get hindi => 'हिन्दी';
+
+  @override
+  String get bengali => 'बंगाली';
+
+  @override
+  String get measurementUnits => 'माप इकाइयाँ';
+
+  @override
+  String get metricUnits => 'मेट्रिक (°C, लीटर)';
+
+  @override
+  String get imperialUnits => 'इम्पीरियल (°F, गैलन)';
+
+  @override
+  String get cropType => 'फसल का प्रकार';
+
+  @override
+  String get rice => 'चावल';
+
+  @override
+  String get wheat => 'गेहूं';
+
+  @override
+  String get maize => 'मक्का';
+
+  @override
+  String get season => 'मौसम';
+
+  @override
+  String get kharif => 'खरीफ';
+
+  @override
+  String get rabi => 'रबी';
+
+  @override
+  String get zaid => 'ज़ैद';
+
+  @override
+  String get waterSource => 'जल स्रोत';
+
+  @override
+  String get tubewell => 'ट्यूबवेल';
+
+  @override
+  String get canal => 'नहर';
+
+  @override
+  String get soilType => 'मिट्टी का प्रकार';
+
+  @override
+  String get loamy => 'दोमट';
+
+  @override
+  String get clay => 'मिट्टी';
+
+  @override
+  String get sandy => 'रेतीली';
+
+  @override
+  String get aboutApp => 'ऐप के बारे में';
+
+  @override
+  String get helpSupport => 'सहायता और समर्थन';
+
+  @override
+  String get logout => 'लॉग आउट';
+
+  @override
+  String get resetPassword => 'पासवर्ड रीसेट';
+
+  @override
+  String get resetPasswordComingSoon => 'पासवर्ड रीसेट जल्द ही आ रहा है!';
+
+  @override
+  String get aboutAppDescription =>
+      'VitaStream आपका पानी सुरक्षा और स्वास्थ्य साथी ऐप है।';
+
+  @override
+  String get developedBy => 'विकसित किया गया: बृस्ती और अमित 💙';
+
+  @override
+  String get supportComingSoon => 'सपोर्ट पेज जल्द ही आ रहा है!';
+
+  @override
+  String get safeWater => '✅ सुरक्षित पानी';
+
+  @override
+  String get unsafeWater => '⚠️ असुरक्षित पानी';
+
+  @override
+  String get phValue => 'pH मान';
+
+  @override
+  String get lastSync => 'अंतिम सिंक';
+
+  @override
+  String get safeTips => '💧 सुरक्षित पानी सुझाव';
+
+  @override
+  String get boilWater => 'पीने से पहले पानी उबालें';
+
+  @override
+  String get useFilters => 'सही पानी फ़िल्टर का उपयोग करें';
+
+  @override
+  String get cleanContainers => 'साफ़ कंटेनरों में स्टोर करें';
+
+  @override
+  String get unsafeActions => '⚠️ असुरक्षित पानी क्रियाएँ';
+
+  @override
+  String get avoidDrinking => 'परीक्षण होने तक पीने से बचें';
+
+  @override
+  String get reportAuthority => 'स्थानीय प्राधिकरण को रिपोर्ट करें';
+
+  @override
+  String get factLoading => '💡 तथ्य लोड हो रहा है...';
+
+  @override
+  String get factFallback => '💡 हाइड्रेटेड और सुरक्षित रहें!';
+
+  @override
+  String get factError => '💡 तथ्य लोड नहीं हो सका। बाद में प्रयास करें।';
 }

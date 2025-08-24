@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import '../l10n/app_localizations.dart'; // ✅ Add localization
 
 class TipsScreen extends StatefulWidget {
   const TipsScreen({super.key});
@@ -18,7 +19,7 @@ class _TipsScreenState extends State<TipsScreen>
   double battery = 78;
   String lastSync = "5 min ago";
   bool isSafe = true;
-  String factOfTheDay = "💡 Loading fact...";
+  String factOfTheDay = "";
 
   late AnimationController _pulseController;
 
@@ -39,6 +40,7 @@ class _TipsScreenState extends State<TipsScreen>
   }
 
   Future<void> _fetchRandomFact() async {
+    final t = AppLocalizations.of(context)!;
     final url =
         Uri.parse("https://uselessfacts.jsph.pl/api/v2/facts/random?language=en");
 
@@ -52,12 +54,12 @@ class _TipsScreenState extends State<TipsScreen>
         });
       } else {
         setState(() {
-          factOfTheDay = "💡 Stay hydrated and safe!";
+          factOfTheDay = t.factFallback;
         });
       }
     } catch (e) {
       setState(() {
-        factOfTheDay = "💡 Could not load fact. Try again later.";
+        factOfTheDay = t.factError;
       });
     }
   }
@@ -143,6 +145,7 @@ class _TipsScreenState extends State<TipsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final backgroundGradient = isDark
@@ -193,7 +196,7 @@ class _TipsScreenState extends State<TipsScreen>
                             repeat: true,
                           ),
                           Text(
-                            isSafe ? "✅ Safe Water" : "⚠️ Unsafe Water",
+                            isSafe ? t.safeWater : t.unsafeWater,
                             style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -209,55 +212,54 @@ class _TipsScreenState extends State<TipsScreen>
                   Row(
                     children: [
                       Expanded(
-                          child: _buildInfoCard("pH Value", "$pH", Icons.science,
-                              Colors.tealAccent)),
-                      const SizedBox(width: 12),
-                      Expanded(
-                          child: _buildInfoCard("Battery", "$battery%",
-                              Icons.battery_charging_full, Colors.orangeAccent)),
+                          child: _buildInfoCard(
+                              t.phValue, "$pH", Icons.science, Colors.tealAccent)),
                       const SizedBox(width: 12),
                       Expanded(
                           child: _buildInfoCard(
-                              "Last Sync", lastSync, Icons.sync, Colors.blueAccent)),
+                              t.battery, "$battery%", Icons.battery_charging_full,
+                              Colors.orangeAccent)),
+                      const SizedBox(width: 12),
+                      Expanded(
+                          child: _buildInfoCard(
+                              t.lastSync, lastSync, Icons.sync, Colors.blueAccent)),
                     ],
                   ),
                   const SizedBox(height: 20),
 
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("💧 Safe Water Tips",
+                    child: Text(t.safeTips,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                             color: Colors.tealAccent.shade100)),
                   ),
                   const SizedBox(height: 12),
-                  _buildTipItem("Boil water before drinking",
-                      "assets/lottie/boil.json", Colors.greenAccent),
+                  _buildTipItem(t.boilWater, "assets/lottie/boil.json",
+                      Colors.greenAccent),
                   const SizedBox(height: 10),
-                  _buildTipItem("Use proper water filters",
-                      "assets/lottie/filter.json", Colors.tealAccent),
+                  _buildTipItem(
+                      t.useFilters, "assets/lottie/filter.json", Colors.tealAccent),
                   const SizedBox(height: 10),
-                  _buildTipItem("Store in clean containers",
-                      "assets/lottie/container.json", Colors.blueAccent),
+                  _buildTipItem(t.cleanContainers, "assets/lottie/container.json",
+                      Colors.blueAccent),
 
                   const SizedBox(height: 20),
 
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("⚠️ Unsafe Water Actions",
+                    child: Text(t.unsafeActions,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                             color: Colors.redAccent.shade100)),
                   ),
                   const SizedBox(height: 12),
-                  _buildTipItem("Avoid drinking until tested",
-                      "assets/icons/warning.svg",
+                  _buildTipItem(t.avoidDrinking, "assets/icons/warning.svg",
                       const Color.fromARGB(255, 246, 81, 81)),
                   const SizedBox(height: 10),
-                  _buildTipItem("Report to local authority",
-                      "assets/icons/report.svg",
+                  _buildTipItem(t.reportAuthority, "assets/icons/report.svg",
                       const Color.fromARGB(255, 240, 205, 160)),
 
                   const SizedBox(height: 20),
@@ -265,7 +267,7 @@ class _TipsScreenState extends State<TipsScreen>
                   // Fact of the Day
                   _glassCard(
                     child: Text(
-                      factOfTheDay,
+                      factOfTheDay.isEmpty ? t.factLoading : factOfTheDay,
                       style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
