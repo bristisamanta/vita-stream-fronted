@@ -1,19 +1,22 @@
 // lib/screens/alert_screen.dart
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart'; // 🌍 localization
 
 class AlertScreen extends StatelessWidget {
   const AlertScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
+
     return Scaffold(
       extendBodyBehindAppBar: true, // ✅ gradient behind AppBar
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
-          "Alerts",
-          style: TextStyle(
+        title: Text(
+          t.alerts, // 🌍 localized
+          style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
@@ -38,17 +41,16 @@ class AlertScreen extends StatelessWidget {
             children: [
               _buildAlertCard(
                 icon: Icons.warning,
-                title: "⚠️ Unsafe Water Quality Detected!",
-                message:
-                    "Please check your water filter device or switch to a safe source.",
+                title: t.unsafeWaterTitle, // 🌍 localized
+                message: t.unsafeWaterMessage,
                 color: Colors.red,
                 context: context,
               ),
               const SizedBox(height: 16),
               _buildAlertCard(
                 icon: Icons.error_outline,
-                title: "Low Filter Efficiency",
-                message: "Your filter may need cleaning or replacement soon.",
+                title: t.lowFilterTitle, // 🌍 localized
+                message: t.lowFilterMessage,
                 color: Colors.orange,
                 context: context,
               ),
@@ -66,6 +68,8 @@ class AlertScreen extends StatelessWidget {
     required Color color,
     required BuildContext context,
   }) {
+    final t = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -112,9 +116,10 @@ class AlertScreen extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             ),
             icon: const Icon(Icons.check, color: Colors.white),
-            label: const Text(
-              "Resolve",
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            label: Text(
+              t.resolve, // 🌍 localized
+              style:
+                  const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
         ],

@@ -5,6 +5,9 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ✅ Import localization
+import '../l10n/app_localizations.dart';
+
 class RemindersScreen extends StatefulWidget {
   const RemindersScreen({super.key});
 
@@ -63,8 +66,10 @@ class _RemindersScreenState extends State<RemindersScreen>
         final timeString = prefs.getString(key)!;
         final parts = timeString.split(':');
         return {
-          'start': TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1])),
-          'stop': TimeOfDay(hour: int.parse(parts[2]), minute: int.parse(parts[3])),
+          'start':
+              TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1])),
+          'stop':
+              TimeOfDay(hour: int.parse(parts[2]), minute: int.parse(parts[3])),
         };
       }).toList();
     });
@@ -166,8 +171,10 @@ class _RemindersScreenState extends State<RemindersScreen>
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!; // ✅ localization
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Crop Watering Reminders')),
+      appBar: AppBar(title: Text(t.remindersTitle)),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -191,22 +198,21 @@ class _RemindersScreenState extends State<RemindersScreen>
                 _glassCard(Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Recommended Watering Times',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20)), // bigger and bold
+                    Text(t.recommendedTimes,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20)),
                     const SizedBox(height: 10),
-                    Text('Start: ${recommendedStart.format(context)}',
+                    Text('${t.start}: ${recommendedStart.format(context)}',
                         style: const TextStyle(fontSize: 18)),
-                    Text('Stop: ${recommendedStop.format(context)}',
+                    Text('${t.stop}: ${recommendedStop.format(context)}',
                         style: const TextStyle(fontSize: 18)),
                   ],
                 )),
                 _glassCard(Column(
                   children: [
-                    const Text('Set Custom Watering Times',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20)), // bigger
+                    Text(t.setCustomTimes,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20)),
                     const SizedBox(height: 14),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -219,7 +225,7 @@ class _RemindersScreenState extends State<RemindersScreen>
                           ),
                           onPressed: () => pickCustomTime(context, true),
                           child: Text(
-                              'Start: ${customStart != null ? customStart!.format(context) : 'Select'}',
+                              '${t.start}: ${customStart != null ? customStart!.format(context) : t.select}',
                               style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold)),
                         ),
@@ -231,7 +237,7 @@ class _RemindersScreenState extends State<RemindersScreen>
                           ),
                           onPressed: () => pickCustomTime(context, false),
                           child: Text(
-                              'Stop: ${customStop != null ? customStop!.format(context) : 'Select'}',
+                              '${t.stop}: ${customStop != null ? customStop!.format(context) : t.select}',
                               style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold)),
                         ),
@@ -247,24 +253,24 @@ class _RemindersScreenState extends State<RemindersScreen>
                       onPressed: (customStart != null && customStop != null)
                           ? () => saveReminder(customStart!, customStop!)
                           : null,
-                      child: const Text('Save Reminder',
-                          style: TextStyle(
+                      child: Text(t.saveReminder,
+                          style: const TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold)),
                     ),
                   ],
                 )),
                 const SizedBox(height: 18),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Text('Active Reminders',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Text(t.activeReminders,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20)),
                 ),
                 ...reminders.map((reminder) => _glassCard(
                       ListTile(
                         leading: const Icon(Icons.alarm, color: Colors.white),
                         title: Text(
-                            'Start: ${reminder['start']!.format(context)} - Stop: ${reminder['stop']!.format(context)}',
+                            '${t.start}: ${reminder['start']!.format(context)} - ${t.stop}: ${reminder['stop']!.format(context)}',
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 16)),
                         trailing: IconButton(
@@ -287,17 +293,14 @@ class _RemindersScreenState extends State<RemindersScreen>
                 const SizedBox(height: 18),
                 _glassCard(Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text('Tips / Alerts',
-                        style: TextStyle(
+                  children: [
+                    Text(t.tipsAlerts,
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20)),
-                    SizedBox(height: 10),
-                    Text('- Water early morning or late evening',
-                        style: TextStyle(fontSize: 16)),
-                    Text('- Avoid watering during heavy rain',
-                        style: TextStyle(fontSize: 16)),
-                    Text('- Ensure irrigation lasts at least 2 hours',
-                        style: TextStyle(fontSize: 16)),
+                    const SizedBox(height: 10),
+                    Text('- ${t.tip1}', style: const TextStyle(fontSize: 16)),
+                    Text('- ${t.tip2}', style: const TextStyle(fontSize: 16)),
+                    Text('- ${t.tip3}', style: const TextStyle(fontSize: 16)),
                   ],
                 )),
               ],

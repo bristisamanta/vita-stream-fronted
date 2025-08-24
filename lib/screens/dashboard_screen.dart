@@ -9,7 +9,7 @@ import '../l10n/app_localizations.dart';
 import '../providers/theme_provider.dart';
 import '../providers/locale_provider.dart';
 
-// Global plugin
+// Global plugin & navigator
 import '../main.dart';
 
 // Screens
@@ -19,7 +19,7 @@ import 'tips_screen.dart';
 import 'water_intake_screen.dart';
 import 'remainder_screen.dart';
 import 'device_status_screen.dart';
-import 'safe_sources_screen.dart'; // ✅ NEW IMPORT
+import 'safe_sources_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -43,9 +43,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         setState(() => showRiskBanner = true);
       }
     } catch (e) {
-      debugPrint("API error: $e");
+      final t = AppLocalizations.of(context)!;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Failed to fetch risk data")),
+        SnackBar(content: Text(t.fetchRiskFailed)),
       );
     } finally {
       setState(() => isLoading = false);
@@ -53,6 +53,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> showAlertNotification() async {
+    // Use navigatorKey to get a context when called from anywhere
+    final ctx = navigatorKey.currentContext ?? context;
+    final t = AppLocalizations.of(ctx)!;
+
     const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
       'alert_channel',
       'Water Alerts',
@@ -66,8 +70,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     await flutterLocalNotificationsPlugin.show(
       0,
-      "Unsafe Water Quality!",
-      "Tap to view details",
+      t.notificationUnsafeTitle,
+      t.notificationUnsafeBody,
       platformDetails,
       payload: "alert",
     );
@@ -88,6 +92,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
     final localeProvider = Provider.of<LocaleProvider>(context, listen: true);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final t = AppLocalizations.of(context)!;
 
     final List<Widget> pages = [
       const PairingScreen(),
@@ -97,10 +102,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ];
 
     final List<String> titles = [
-      AppLocalizations.of(context)!.pairDevice,
-      "VitaStream",
-      AppLocalizations.of(context)!.safeWaterSources,
-      AppLocalizations.of(context)!.tips,
+      t.pairDevice,
+      t.appName,              // previously "VitaStream"
+      t.safeWaterSources,
+      t.tips,
     ];
 
     return Scaffold(
@@ -117,18 +122,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
           PopupMenuButton<String>(
             icon: const Icon(Icons.language, color: Colors.white),
             onSelected: (value) {
-              if (value == 'en') {
-                localeProvider.setLocale(const Locale('en'));
-              } else if (value == 'hi') {
-                localeProvider.setLocale(const Locale('hi'));
-              } else if (value == 'bn') {
-                localeProvider.setLocale(const Locale('bn'));
-              }
+              context.read<LocaleProvider>().setLocale(Locale(value));
             },
             itemBuilder: (context) => [
-              const PopupMenuItem(value: 'en', child: Text("English")),
-              const PopupMenuItem(value: 'hi', child: Text("हिन्दी")),
-              const PopupMenuItem(value: 'bn', child: Text("বাংলা")),
+              PopupMenuItem(value: 'en', child: Text(t.languageEnglish)),
+              PopupMenuItem(value: 'hi', child: Text(t.languageHindi)),
+              PopupMenuItem(value: 'bn', child: Text(t.languageBengali)),
             ],
           ),
           IconButton(
@@ -167,21 +166,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
           onTap: (index) => setState(() => _selectedIndex = index),
           selectedItemColor: Colors.teal,
           unselectedItemColor: Colors.grey,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.bluetooth), label: "Pair"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.dashboard), label: "Dashboard"),
-            BottomNavigationBarItem(icon: Icon(Icons.map), label: "Map"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.lightbulb), label: "Tips"),
+          items: [
+            BottomNavigationBarItem(icon: const Icon(Icons.bluetooth), label: t.bottomPair),
+            BottomNavigationBarItem(icon: const Icon(Icons.dashboard), label: t.bottomDashboard),
+            BottomNavigationBarItem(icon: const Icon(Icons.map), label: t.bottomMap),
+            BottomNavigationBarItem(icon: const Icon(Icons.lightbulb), label: t.bottomTips),
           ],
         ),
       ),
     );
   }
 
-  /// ✅ Blockchain Navigation Banner
+  /// Blockchain Navigation Banner
   Widget _buildBlockchainBanner(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(16),
@@ -206,9 +204,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Blockchain Services",
-            style: TextStyle(
+          Text(
+            t.blockchainServices,
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Colors.white,
@@ -218,11 +216,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildBannerAction(
-                  context, Icons.account_balance_wallet, "Wallet", '/wallet'),
-              _buildBannerAction(context, Icons.send, "Send Tx", '/tx'),
-              _buildBannerAction(
-                  context, Icons.verified_user, "Subsidy", '/subsidy'),
+              _buildBannerAction(context, Icons.account_balance_wallet, t.wallet, '/wallet'),
+              _buildBannerAction(context, Icons.send, t.sendTx, '/tx'),
+              _buildBannerAction(context, Icons.verified_user, t.subsidy, '/subsidy'),
             ],
           ),
         ],
@@ -254,7 +250,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  /// ✅ Main Dashboard Page
+  /// Main Dashboard Page
   Widget _buildDashboardPage(BuildContext context, bool isDark) {
     return Container(
       key: const ValueKey("dashboard"),
@@ -289,7 +285,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             _glassCard(_buildProfileCard(isDark)),
             const SizedBox(height: 20),
 
-            /// Blockchain Banner (not glass card)
             _buildBlockchainBanner(context),
             const SizedBox(height: 24),
 
@@ -324,6 +319,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildRiskBanner() {
+    final t = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Container(
@@ -348,18 +344,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
             color: Colors.white,
             size: 36,
           ),
-          title: const Text(
-            "Unsafe Water Quality Detected!",
-            style: TextStyle(
+          title: Text(
+            t.riskBannerTitle,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),
-          subtitle: const Text(
-            "Immediate action required ⚠",
-            style: TextStyle(color: Colors.white70, fontSize: 14),
-          ),
+         subtitle: const Text(
+  "Immediate action required ⚠",
+  style: TextStyle(color: Colors.white70, fontSize: 14),
+),
+
           trailing: IconButton(
             icon: const Icon(Icons.close, color: Colors.white),
             onPressed: () {
@@ -374,6 +371,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildProfileCard(bool isDark) {
+    final t = AppLocalizations.of(context)!;
     return InkWell(
       onTap: () => Navigator.pushNamed(context, "/profile"),
       child: Container(
@@ -407,8 +405,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Localize with a placeholder for name
                   Text(
-                    "Hello Bristi 👋",
+                    t.helloName("Bristi"),
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -417,7 +416,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    "Trust yourself and keep going.",
+                    t.dashboardMotto,
                     style: TextStyle(
                       fontSize: 14,
                       color: isDark ? Colors.white70 : Colors.black87,
@@ -445,14 +444,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildReadingsRow(bool isDark) {
+    final t = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _readingCard("pH", "7.1", Icons.science, Colors.green, isDark),
-          _readingCard("TDS", "220 ppm", Icons.water_drop, Colors.orange, isDark),
-          _readingCard("Nitrate", "High", Icons.warning, Colors.red, isDark),
+          _readingCard(t.readingPH, "7.1", Icons.science, Colors.green, isDark),
+          _readingCard(t.readingTDS, "220 ppm", Icons.water_drop, Colors.orange, isDark),
+          _readingCard(t.readingNitrate, t.readingHigh, Icons.warning, Colors.red, isDark),
         ],
       ),
     );
@@ -471,8 +471,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        boxShadow: [
-          const BoxShadow(
+        boxShadow: const [
+          BoxShadow(
             color: Colors.black26,
             blurRadius: 6,
             offset: Offset(2, 4),
@@ -507,19 +507,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildFarmHealth(bool isDark) {
+    final t = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Farm Health Score",
+          Text(t.farmHealthTitle,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: isDark ? Colors.white : Colors.black)),
           const SizedBox(height: 8),
           const LinearProgressIndicator(value: 0.75, minHeight: 12),
           const SizedBox(height: 8),
-          Text("75% Healthy - Monitor water quality closely",
+          Text(t.farmHealthHint(75),
               style: TextStyle(
                   color: isDark ? Colors.white70 : Colors.black87)),
         ],
@@ -528,6 +529,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildFeatureGrid(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
@@ -535,39 +537,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
       crossAxisSpacing: 12,
       mainAxisSpacing: 12,
       children: [
-        _featureCard("Water Intake", Icons.water_drop, Colors.blue, onTap: () {
+        _featureCard(t.featureWaterIntake, Icons.water_drop, Colors.blue, onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const WaterIntakeScreen()),
           );
         }),
-        _featureCard("Reminders", Icons.alarm, Colors.purple, onTap: () {
+        _featureCard(t.featureReminders, Icons.alarm, Colors.purple, onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const RemindersScreen()),
           );
         }),
-        _featureCard("Device Status", Icons.devices, Colors.orange, onTap: () {
+        _featureCard(t.featureDeviceStatus, Icons.devices, Colors.orange, onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const DeviceStatusScreen()),
           );
         }),
-        _featureCard("Safe Sources", Icons.map, Colors.green, onTap: () {
+        _featureCard(t.featureSafeSources, Icons.map, Colors.green, onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const SafeSourcesScreen()),
           );
         }),
-        _featureCard("Alerts", Icons.warning, Colors.red, onTap: () {
+        _featureCard(t.featureAlerts, Icons.warning, Colors.red, onTap: () {
           Navigator.pushNamed(context, "/alert");
         }),
       ],
     );
   }
 
-  Widget _featureCard(String title, IconData icon, Color color,
-      {VoidCallback? onTap}) {
+  Widget _featureCard(String title, IconData icon, Color color, {VoidCallback? onTap}) {
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -593,6 +594,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildVideoPlaceholder() {
+    final t = AppLocalizations.of(context)!;
     return Container(
       height: 200,
       alignment: Alignment.center,
@@ -601,8 +603,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         color: Colors.black.withOpacity(0.3),
         border: Border.all(color: Colors.white.withOpacity(0.3)),
       ),
-      child: const Text("🎥 Tutorial Video Coming Soon",
-          style: TextStyle(color: Colors.white)),
+      child: Text(
+        t.videoComingSoon,
+        style: const TextStyle(color: Colors.white),
+      ),
     );
   }
 }

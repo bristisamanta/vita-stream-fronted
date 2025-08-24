@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+// ✅ localization import
+import '../l10n/app_localizations.dart';
 
 class DeviceStatusScreen extends StatefulWidget {
   const DeviceStatusScreen({super.key});
@@ -13,10 +15,11 @@ class _DeviceStatusScreenState extends State<DeviceStatusScreen> {
   double batteryLevel = 0.85;
   double syncProgress = 0.6;
   bool isConnected = true;
-  String connectedDeviceName = "VitaStream Device 001";
+  String connectedDeviceName = "VitaStream Device 001"; // ✅ keep, name can also be localized if needed
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!; // ✅ use localization
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
@@ -24,7 +27,7 @@ class _DeviceStatusScreenState extends State<DeviceStatusScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text("Device Status"),
+        title: Text(t.deviceStatusTitle), // ✅ localized
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -49,9 +52,9 @@ class _DeviceStatusScreenState extends State<DeviceStatusScreen> {
                   _glassCard(
                     Column(
                       children: [
-                        const Text(
-                          "Connected Device",
-                          style: TextStyle(
+                        Text(
+                          t.connectedDevice, // ✅ localized
+                          style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 12),
@@ -70,9 +73,9 @@ class _DeviceStatusScreenState extends State<DeviceStatusScreen> {
                 _glassCard(
                   Column(
                     children: [
-                      const Text(
-                        "Battery Level",
-                        style: TextStyle(
+                      Text(
+                        t.batteryLevel, // ✅ localized
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 12),
@@ -98,14 +101,14 @@ class _DeviceStatusScreenState extends State<DeviceStatusScreen> {
                 _glassCard(
                   Column(
                     children: [
-                      const Text(
-                        "Device Connection",
-                        style: TextStyle(
+                      Text(
+                        t.deviceConnection, // ✅ localized
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        isConnected ? "Connected" : "Disconnected",
+                        isConnected ? t.connected : t.disconnected, // ✅ localized
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -127,7 +130,7 @@ class _DeviceStatusScreenState extends State<DeviceStatusScreen> {
                           ),
                         ),
                         child: Text(
-                          isConnected ? "Disconnect" : "Connect",
+                          isConnected ? t.disconnect : t.connect, // ✅ localized
                           style: const TextStyle(fontSize: 16),
                         ),
                       ),
@@ -139,9 +142,9 @@ class _DeviceStatusScreenState extends State<DeviceStatusScreen> {
                 _glassCard(
                   Column(
                     children: [
-                      const Text(
-                        "Sync Now",
-                        style: TextStyle(
+                      Text(
+                        t.syncNow, // ✅ localized
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 12),
@@ -180,9 +183,9 @@ class _DeviceStatusScreenState extends State<DeviceStatusScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Text(
-                          "Start Sync",
-                          style: TextStyle(fontSize: 16),
+                        child: Text(
+                          t.startSync, // ✅ localized
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ),
                     ],
@@ -192,16 +195,17 @@ class _DeviceStatusScreenState extends State<DeviceStatusScreen> {
                 // Last Update
                 _glassCard(
                   Column(
-                    children: const [
+                    children: [
                       Text(
-                        "Last Update",
-                        style: TextStyle(
+                        t.lastUpdate, // ✅ localized
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       Text(
-                        "Device synced 10 minutes ago",
-                        style: TextStyle(fontSize: 16, color: Colors.white70),
+                        t.lastUpdateMessage, // ✅ localized
+                        style: const TextStyle(
+                            fontSize: 16, color: Colors.white70),
                       ),
                     ],
                   ),
@@ -234,4 +238,3 @@ class _DeviceStatusScreenState extends State<DeviceStatusScreen> {
     );
   }
 }
-
