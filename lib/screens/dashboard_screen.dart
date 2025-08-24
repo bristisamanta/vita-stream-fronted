@@ -352,10 +352,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          subtitle: Text(
-            t.riskBannerSubtitle,
-            style: const TextStyle(color: Colors.white70, fontSize: 14),
-          ),
+         subtitle: const Text(
+  "Immediate action required ⚠",
+  style: TextStyle(color: Colors.white70, fontSize: 14),
+),
+
           trailing: IconButton(
             icon: const Icon(Icons.close, color: Colors.white),
             onPressed: () {

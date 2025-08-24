@@ -286,4 +286,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resolve => 'Resolve';
+
+  @override
+  String get welcomeBack => 'Welcome Back 👋';
+
+  @override
+  String get loginContinue => 'Login to continue';
+
+  @override
+  String get phoneNumber => 'Phone Number';
+
+  @override
+  String get enterOtp => 'Enter OTP';
+
+  @override
+  String get errorPhone => 'Please enter phone number';
+
+  @override
+  String get otpSent => 'OTP sent';
+
+  @override
+  String get invalidOtp => 'Invalid OTP';
+
+  @override
+  String get login => 'Login';
+
+  @override
+  String get getOtp => 'Get OTP';
+
+  @override
+  String get noAccount => 'Don\'t have an account? ';
+
+  @override
+  String get signUp => 'Sign Up';
 }

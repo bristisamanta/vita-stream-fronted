@@ -286,4 +286,37 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get resolve => 'सुलझाएं';
+
+  @override
+  String get welcomeBack => 'वापस स्वागत है 👋';
+
+  @override
+  String get loginContinue => 'जारी रखने के लिए लॉगिन करें';
+
+  @override
+  String get phoneNumber => 'फ़ोन नंबर';
+
+  @override
+  String get enterOtp => 'OTP दर्ज करें';
+
+  @override
+  String get errorPhone => 'कृपया फ़ोन नंबर दर्ज करें';
+
+  @override
+  String get otpSent => 'OTP भेजा गया';
+
+  @override
+  String get invalidOtp => 'अमान्य OTP';
+
+  @override
+  String get login => 'लॉगिन';
+
+  @override
+  String get getOtp => 'OTP प्राप्त करें';
+
+  @override
+  String get noAccount => 'क्या आपका खाता नहीं है? ';
+
+  @override
+  String get signUp => 'साइन अप करें';
 }

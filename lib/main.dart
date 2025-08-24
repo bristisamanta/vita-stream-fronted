@@ -3,7 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
-// add these along with existing imports
+// Blockchain
 import 'blockchain/wallet_manager.dart';
 import 'blockchain/tx_submitter.dart';
 import 'blockchain/providers/wallet_provider.dart';
@@ -57,16 +57,16 @@ Future<void> main() async {
     },
   );
 
-  // create blockchain helpers
+  // Blockchain helpers
   final walletManager = WalletManager();
-  final txSubmitter = TxSubmitter(baseUrl: 'https://your-backend.example.com'); // <- change this
+  final txSubmitter =
+      TxSubmitter(baseUrl: 'https://your-backend.example.com'); // change this
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
-        // add these two:
         ChangeNotifierProvider(
           create: (_) => WalletProvider(
             manager: walletManager,
@@ -85,8 +85,28 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+// ✅ MyApp as StatefulWidget to support dynamic locale
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  static void setLocale(BuildContext context, Locale locale) {
+    final _MyAppState? state =
+        context.findAncestorStateOfType<_MyAppState>();
+    state?.setLocale(locale);
+  }
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale? _locale;
+
+  void setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,8 +130,8 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.teal,
           ),
 
-          // 🌍 Localization setup
-          locale: localeProvider.locale ?? const Locale('en'),
+          // 🌍 Localization
+          locale: _locale ?? localeProvider.locale ?? const Locale('en'),
           supportedLocales: AppLocalizations.supportedLocales,
           localizationsDelegates: const [
             AppLocalizations.delegate,

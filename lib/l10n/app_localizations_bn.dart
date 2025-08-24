@@ -286,4 +286,37 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get resolve => 'সমাধান করুন';
+
+  @override
+  String get welcomeBack => 'আবার স্বাগতম 👋';
+
+  @override
+  String get loginContinue => 'চালিয়ে যেতে লগইন করুন';
+
+  @override
+  String get phoneNumber => 'ফোন নম্বর';
+
+  @override
+  String get enterOtp => 'OTP লিখুন';
+
+  @override
+  String get errorPhone => 'দয়া করে ফোন নম্বর লিখুন';
+
+  @override
+  String get otpSent => 'OTP পাঠানো হয়েছে';
+
+  @override
+  String get invalidOtp => 'অবৈধ OTP';
+
+  @override
+  String get login => 'লগইন';
+
+  @override
+  String get getOtp => 'OTP নিন';
+
+  @override
+  String get noAccount => 'অ্যাকাউন্ট নেই? ';
+
+  @override
+  String get signUp => 'সাইন আপ করুন';
 }
