@@ -48,10 +48,12 @@ Future<void> main() async {
   const InitializationSettings initializationSettings =
       InitializationSettings(android: initializationSettingsAndroid);
 
+  // Initialize plugin with callback for notification tap
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
     onDidReceiveNotificationResponse: (NotificationResponse response) {
       if (response.payload == "alert") {
+        // Navigate to alert screen when user taps the system notification
         navigatorKey.currentState?.pushNamed("/alert");
       }
     },
@@ -60,7 +62,7 @@ Future<void> main() async {
   // Blockchain helpers
   final walletManager = WalletManager();
   final txSubmitter =
-      TxSubmitter(baseUrl: 'https://your-backend.example.com'); // change this
+      TxSubmitter(baseUrl: 'https://your-backend.example.com'); // update URL
 
   runApp(
     MultiProvider(
@@ -90,8 +92,7 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   static void setLocale(BuildContext context, Locale locale) {
-    final _MyAppState? state =
-        context.findAncestorStateOfType<_MyAppState>();
+    final _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
     state?.setLocale(locale);
   }
 

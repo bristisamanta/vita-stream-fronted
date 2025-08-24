@@ -103,27 +103,36 @@ class _TipsScreenState extends State<TipsScreen>
   }
 
   Widget _buildInfoCard(String label, String value, IconData icon, Color color) {
-    return _glassCard(
-      child: Row(
-        children: [
-          Icon(icon, color: color, size: 28),
-          const SizedBox(width: 12),
-          Column(
+  return _glassCard(
+    child: Row(
+      children: [
+        Icon(icon, color: color, size: 28),
+        const SizedBox(width: 12),
+        Flexible(   // <-- ensures text doesn't overflow
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label,
-                  style: const TextStyle(fontSize: 12, color: Colors.white70)),
-              Text(value,
-                  style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white)),
+              Text(
+                label,
+                style: const TextStyle(fontSize: 12, color: Colors.white70),
+                overflow: TextOverflow.ellipsis,  // truncate if too long
+              ),
+              Text(
+                value,
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+                overflow: TextOverflow.ellipsis,  // truncate if too long
+              ),
             ],
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
 
   Widget _buildTipItem(String text, String assetPath, Color bgColor) {
     return _glassCard(

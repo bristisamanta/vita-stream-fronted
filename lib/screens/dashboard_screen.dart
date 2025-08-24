@@ -17,7 +17,7 @@ import 'pairing_screen.dart';
 import 'map_screen.dart';
 import 'tips_screen.dart';
 import 'water_intake_screen.dart';
-import 'remainder_screen.dart';
+import 'remainder_screen.dart'; // fixed import name
 import 'device_status_screen.dart';
 import 'safe_sources_screen.dart';
 
@@ -29,7 +29,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  String blockchainStatus = "";
   int _selectedIndex = 1;
   bool showRiskBanner = true;
   bool isLoading = false;
@@ -53,7 +52,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> showAlertNotification() async {
-    // Use navigatorKey to get a context when called from anywhere
     final ctx = navigatorKey.currentContext ?? context;
     final t = AppLocalizations.of(ctx)!;
 
@@ -89,8 +87,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
-    final localeProvider = Provider.of<LocaleProvider>(context, listen: true);
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final localeProvider = Provider.of<LocaleProvider>(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final t = AppLocalizations.of(context)!;
 
@@ -103,28 +101,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     final List<String> titles = [
       t.pairDevice,
-      t.appName,              // previously "VitaStream"
+      t.appName,
       t.safeWaterSources,
       t.tips,
     ];
 
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        title: Text(
-          titles[_selectedIndex],
-          style: const TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold),
-        ),
+   return Scaffold(
+  extendBodyBehindAppBar: true,
+  appBar: AppBar(
+    elevation: 0,
+    backgroundColor: Colors.transparent,
+    title: Image.asset(
+      "assets/images/logos.jpg", // path of your uploaded file
+      height: 60, // adjust height as needed
+      fit: BoxFit.contain,
+    ),
         actions: [
           PopupMenuButton<String>(
             icon: const Icon(Icons.language, color: Colors.white),
             onSelected: (value) {
-              context.read<LocaleProvider>().setLocale(Locale(value));
+              localeProvider.setLocale(Locale(value));
             },
-            itemBuilder: (context) => [
+            itemBuilder: (_) => [
               PopupMenuItem(value: 'en', child: Text(t.languageEnglish)),
               PopupMenuItem(value: 'hi', child: Text(t.languageHindi)),
               PopupMenuItem(value: 'bn', child: Text(t.languageBengali)),
@@ -135,11 +133,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
               color: Colors.white,
             ),
-            onPressed: () {
-              themeProvider.toggleTheme(
-                themeProvider.themeMode != ThemeMode.dark,
-              );
-            },
+            onPressed: () => themeProvider.toggleTheme(
+              themeProvider.themeMode != ThemeMode.dark,
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.notifications, color: Colors.white),
@@ -178,79 +174,79 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   /// Blockchain Navigation Banner
-  Widget _buildBlockchainBanner(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Colors.blueAccent.withOpacity(0.7),
-            Colors.purpleAccent.withOpacity(0.7)
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+Widget _buildBlockchainBanner(BuildContext context) {
+  final t = AppLocalizations.of(context)!;
+  return Container(
+    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        colors: [
+          Colors.blueAccent.withOpacity(0.7),
+          Colors.purpleAccent.withOpacity(0.7)
+        ],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+      borderRadius: BorderRadius.circular(20),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.2),
+          blurRadius: 10,
+          offset: const Offset(0, 5),
         ),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
+      ],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          t.blockchainServices,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            t.blockchainServices,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildBannerAction(context, Icons.account_balance_wallet, t.wallet, '/wallet'),
-              _buildBannerAction(context, Icons.send, t.sendTx, '/tx'),
-              _buildBannerAction(context, Icons.verified_user, t.subsidy, '/subsidy'),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+        const SizedBox(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildBannerAction(context, Icons.account_balance_wallet, t.wallet, '/wallet'),
+            _buildBannerAction(context, Icons.send, t.sendTx, '/tx'),
+            _buildBannerAction(context, Icons.verified_user, t.subsidy, '/subsidy'),
+          ],
+        ),
+      ],
+    ),
+  );
+}
 
-  Widget _buildBannerAction(
-      BuildContext context, IconData icon, String label, String route) {
-    return InkWell(
-      onTap: () => Navigator.pushNamed(context, route),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.2),
-            ),
-            child: Icon(icon, color: Colors.white, size: 28),
+Widget _buildBannerAction(
+    BuildContext context, IconData icon, String label, String route) {
+  return InkWell(
+    onTap: () => Navigator.pushNamed(context, route),
+    child: Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white.withOpacity(0.2),
           ),
-          const SizedBox(height: 6),
-          Text(
-            label,
-            style: const TextStyle(color: Colors.white, fontSize: 12),
-          ),
-        ],
-      ),
-    );
-  }
+          child: Icon(icon, color: Colors.white, size: 28),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          label,
+          style: const TextStyle(color: Colors.white, fontSize: 12),
+        ),
+      ],
+    ),
+  );
+}
 
-  /// Main Dashboard Page
+
   Widget _buildDashboardPage(BuildContext context, bool isDark) {
     return Container(
       key: const ValueKey("dashboard"),
@@ -261,13 +257,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
           colors: [
             Color.fromARGB(182, 110, 197, 255),
             Color.fromARGB(127, 2, 96, 172),
-            Color.fromARGB(223, 147, 202, 232)
+            Color.fromARGB(223, 147, 202, 232),
           ],
         ),
       ),
       child: SingleChildScrollView(
-        padding:
-            const EdgeInsets.only(top: 100, left: 16, right: 16, bottom: 20),
+        padding: const EdgeInsets.only(top: 100, left: 16, right: 16, bottom: 20),
         child: Column(
           children: [
             if (isLoading)
@@ -284,10 +279,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
             _glassCard(_buildProfileCard(isDark)),
             const SizedBox(height: 20),
-
-            _buildBlockchainBanner(context),
-            const SizedBox(height: 24),
-
+           _buildBlockchainBanner(context), const SizedBox(height: 24),
             _glassCard(_buildReadingsRow(isDark)),
             const SizedBox(height: 20),
             _glassCard(_buildFarmHealth(isDark)),
@@ -319,9 +311,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildRiskBanner() {
-    final t = AppLocalizations.of(context)!;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -339,31 +330,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ],
         ),
         child: ListTile(
-          leading: const Icon(
-            Icons.warning_amber_rounded,
-            color: Colors.white,
-            size: 36,
-          ),
+           onTap: () => Navigator.pushNamed(context, "/alert"),
+          leading: const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 36),
           title: Text(
-            t.riskBannerTitle,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            AppLocalizations.of(context)!.riskBannerTitle,
+            style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
           ),
-         subtitle: const Text(
-  "Immediate action required ⚠",
-  style: TextStyle(color: Colors.white70, fontSize: 14),
-),
-
+          subtitle: const Text(
+            "Immediate action required ⚠",
+            style: TextStyle(color: Colors.white70, fontSize: 14),
+          ),
           trailing: IconButton(
             icon: const Icon(Icons.close, color: Colors.white),
-            onPressed: () {
-              setState(() {
-                showRiskBanner = false;
-              });
-            },
+            onPressed: () => setState(() => showRiskBanner = false),
           ),
         ),
       ),

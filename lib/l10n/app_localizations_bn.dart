@@ -287,7 +287,6 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get resolve => 'সমাধান করুন';
 
-
   @override
   String get scanningDevices => 'ওয়াইফাই ডিভাইস স্ক্যান করা হচ্ছে...';
 
