@@ -9,38 +9,56 @@ dependencies:
   flutter:
     sdk: flutter
 
-  animations: ^2.0.11
+  # Core Flutter packages
   cupertino_icons: ^1.0.8
-  flutter_reactive_ble: ^5.3.1
-  sqflite: ^2.3.3
-  permission_handler: ^11.3.0
-  flutter_local_notifications: 19.4.0   # ✅ keep latest version
-  flutter_map: ^6.0.1
-  lottie: ^3.0.0
-  flutter_svg: ^2.0.9
-  smooth_page_indicator: ^1.1.0
-  animated_background: ^2.0.0
-  google_maps_flutter: ^2.5.0
-  geolocator: ^10.1.0
-  url_launcher: ^6.2.5
-  http: ^1.2.1   # ✅ keep latest version
-  provider: ^6.1.2
-  shared_preferences: ^2.2.2
-  image_picker: ^1.1.1
-  flutter_blue_plus: ^1.34.3
-  flutter_localizations:   # ✅ proper format
+  flutter_localizations:
     sdk: flutter
-  flutter_secure_storage: ^8.0.0
   intl: ^0.20.2
 
-  # 🌱 New dependencies for crop irrigation dashboard
-  syncfusion_flutter_charts: 30.2.6+1
-  fl_chart: ^0.68.0
-  fluttertoast: ^8.2.5
-
-  # 🔹 Timezone package required for flutter_local_notifications zonedSchedule
-  timezone: ^0.10.0
+  # Animations & UI
+  animations: ^2.0.11
+  lottie: ^3.1.0
+  flutter_svg: ^2.0.9
+  smooth_page_indicator: ^1.2.0
+  animated_background: ^2.0.0
   percent_indicator: ^4.2.5
+  fluttertoast: ^8.2.8
+
+  # BLE / IoT
+  flutter_reactive_ble: ^5.3.1
+  flutter_blue_plus: ^1.35.0
+
+  # Storage & Local DB
+  sqflite: ^2.4.0
+  path: ^1.9.0
+  path_provider: ^2.1.5
+  shared_preferences: ^2.3.2
+  flutter_secure_storage: ^9.0.0
+
+  # Permissions & Notifications
+  permission_handler: ^11.3.1
+  flutter_local_notifications: ^19.4.0
+  timezone: ^0.10.0
+
+  # Maps & Location
+  flutter_map: ^7.0.2
+  google_maps_flutter: ^2.7.0
+  geolocator: ^12.0.0
+  url_launcher: ^6.3.0
+
+  # HTTP / Network
+  http: ^1.3.0
+  provider: ^6.1.3
+
+  # Media
+  image_picker: ^1.1.2
+
+  # Charts & Dashboard
+  syncfusion_flutter_charts: ^28.1.38
+  fl_chart: ^0.69.0
+
+  connectivity_plus: ^6.0.3
+
 
 dev_dependencies:
   flutter_test:
@@ -49,13 +67,15 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  generate: true   # 🔑 required for l10n
+  generate: true
 
   assets:
     - assets/images/
     - assets/lottie/
+
+# Localization config
 generate:
-    l10n:
-      arb-dir: lib/l10n
-      template-arb-file: app_en.arb
-      output-localization-file: app_localizations.dart
+  l10n:
+    arb-dir: lib/l10n
+    template-arb-file: app_en.arb
+    output-localization-file: app_localizations.dart
