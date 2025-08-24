@@ -112,8 +112,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     elevation: 0,
     backgroundColor: Colors.transparent,
     title: Image.asset(
-      "assets/images/logos.jpg", // path of your uploaded file
-      height: 60, // adjust height as needed
+      "assets/images/vita_logo.png", // path of your uploaded file
+      height: 150,
+      width: 150, // adjust height as needed
       fit: BoxFit.contain,
     ),
         actions: [
